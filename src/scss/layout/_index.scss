@@ -1,0 +1,53 @@
+@use '../util' as u;
+
+:root {
+  --main-color: #f48225;
+  --box-shadow: 0 0 0 1px rgb(0 0 0 / 7%), 0 2px 4px rgb(0 0 0 / 5%),
+    0 12px 24px rgb(0 0 0 / 5%);
+}
+
+body {
+  margin: 0 auto;
+  width: 80%;
+}
+
+.header {
+  margin-top: 40px;
+
+  &__logo-container {
+    display: flex;
+    // align-items: center;
+  }
+
+  &__logo {
+    display: flex;
+    align-items: center;
+    margin: 0 auto;
+
+    &-img {
+      width: 80px;
+    }
+  }
+
+  &__nav {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+
+    &-btn {
+      padding: 10px 15px;
+      border: 1px solid var(--main-color);
+      border-radius: 7px;
+      box-shadow: var(--box-shadow);
+
+      &:hover {
+        color: #fff;
+        background-color: var(--main-color);
+      }
+      &:active {
+        transform: scale(0.95);
+      }
+    }
+  }
+}

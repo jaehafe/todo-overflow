@@ -1,0 +1,19 @@
+{
+  "name": "todo-overflow",
+  "private": false,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "sass": "^1.57.1",
+    "vite": "^4.0.0"
+  },
+  "main": "index.js",
+  "repository": "https://github.com/jaehafe/todo-overflow.git",
+  "author": "Jaeha Lee <wogkdkrm112@gmail.com>",
+  "license": "MIT"
+}

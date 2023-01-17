@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/movie-logo.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo overflow</title>
+    <script type="module" src="./src/js/main.js" defer></script>
+  </head>
+  <body>
+    <header class="header">
+      <div class="header__logo-container">
+        <a href="/" class="header__logo">
+          <img src="movie-logo.svg" alt="logo" class="header__logo-img" />
+          <h1 class="header__logo-name">Todo overflow</h1>
+        </a>
+      </div>
+      <nav class="header__nav">
+        <button data-category-name="entire" class="header__nav-btn">
+          할 일 전체
+        </button>
+        <button data-category-name="completed" class="header__nav-btn">
+          완료
+        </button>
+        <button data-category-name="doing" class="header__nav-btn">
+          하는중
+        </button>
+      </nav>
+    </header>
+  </body>
+</html>
