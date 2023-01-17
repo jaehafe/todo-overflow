@@ -8,7 +8,7 @@
 
 body {
   margin: 0 auto;
-  width: 80%;
+  max-width: 1200px;
 }
 
 .header {
@@ -16,7 +16,6 @@ body {
 
   &__logo-container {
     display: flex;
-    // align-items: center;
   }
 
   &__logo {
@@ -48,6 +47,119 @@ body {
       &:active {
         transform: scale(0.95);
       }
+    }
+  }
+}
+
+/** main */
+.main {
+  padding: 36px;
+  width: 80%;
+  margin: 30px auto;
+  border: 1px solid var(--main-color);
+  border-radius: 7px;
+  box-shadow: var(--box-shadow);
+
+  &__padding {
+    width: 80%;
+    margin: 0 auto;
+  }
+
+  &__header {
+    &-container {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+  }
+
+  &__input {
+    &-container {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    &-text {
+      width: clamp(200px, 100%, 100%);
+      margin-right: 6px;
+      padding-left: 20px;
+      border: 1px solid var(--main-color);
+      border-radius: 7px;
+
+      &::placeholder {
+        color: #f48225;
+      }
+    }
+
+    &-add-btn {
+      // button
+    }
+  }
+
+  &__todo {
+    &-list {
+      margin-top: 16px;
+      display: flex;
+      // flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+
+      &--title-container {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+      &--btn-container {
+        display: flex;
+        gap: 6px;
+      }
+
+      &--date {
+        min-width: 60px;
+      }
+
+      &--title {
+        min-width: 60px;
+      }
+    }
+  }
+
+  //
+}
+
+.btn {
+  min-width: 60px;
+  height: 36px;
+  border: 1px solid var(--main-color);
+  border-radius: 7px;
+  box-shadow: var(--box-shadow);
+
+  &:hover {
+    color: #fff;
+    background-color: var(--main-color);
+  }
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+/**  */
+@include u.breakpoint-down(medium) {
+  .main {
+    padding: 20px;
+    width: 96%;
+  }
+}
+
+@include u.breakpoint-down(small) {
+}
+@include u.breakpoint-down(xsmall) {
+  .main__todo-list {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    &--btn-container {
+      margin-top: 6px;
     }
   }
 }
