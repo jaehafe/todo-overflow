@@ -3,45 +3,6 @@ import '../scss/style.scss';
 const $ = (selector) => document.querySelector(selector);
 
 function App() {
-  // todo edit 함수
-  // 1. 수정 버튼을 클릭하면 -> 저장 글씨 바뀜, input.focus()
-  // 2. todo-title이 바뀔 수 있게
-  // 3. 다시 저장 버튼을 클릭하면 -> 수정 글씨 바뀌고 입력된 title 저장, input.blur()
-  // const $editBtn = e.target.closest('li').querySelector('.edit-btn');
-  const updateTodoTitle = (e) => {
-    const $editBtn = e.target.closest('li').querySelector('.edit-btn');
-    const $editInput = e.target.closest('li').querySelector('.todo-title');
-
-    if ($editBtn.textContent === '수정') {
-      $editInput.removeAttribute('readonly');
-      $editBtn.innerText = '저장';
-      $editInput.focus();
-      $editInput.style.textDecoration = 'none';
-      console.log('edit');
-    } else if ($editBtn.textContent === '저장') {
-      $editInput.setAttribute('readonly', 'readonly');
-      $editInput.blur();
-      $editBtn.innerText = '수정';
-      const updatedTodoTitle = $editInput.value;
-      console.log('save');
-    }
-  };
-
-  $('.main__todo').addEventListener('click', (e) => {
-    // todo 수정
-    if (e.target.classList.contains('edit-btn')) {
-      updateTodoTitle(e);
-      return;
-    }
-    // todo 삭제
-    if (e.target.classList.contains('delete-btn')) {
-      if (confirm('정말 삭제하시겠습니까?')) {
-        e.target.closest('li').remove();
-        updateToDoCount();
-      }
-    }
-  });
-
   // todo 갯수 업데이트
   const updateToDoCount = () => {
     const todoTotalCount = $('.main__todo').querySelectorAll('li').length;
@@ -68,6 +29,54 @@ function App() {
     updateToDoCount();
     $('.main__input-text').value = '';
   };
+
+  // todo edit 함수
+  // 1. 수정 버튼을 클릭하면 -> 저장 글씨 바뀜, input.focus()
+  // 2. todo-title이 바뀔 수 있게
+  // 3. 다시 저장 버튼을 클릭하면 -> 수정 글씨 바뀌고 입력된 title 저장, input.blur()
+  // const $editBtn = e.target.closest('li').querySelector('.edit-btn');
+  const updateTodoTitle = (e) => {
+    const $editBtn = e.target.closest('li').querySelector('.edit-btn');
+    const $editInput = e.target.closest('li').querySelector('.todo-title');
+
+    if ($editBtn.textContent === '수정') {
+      $editInput.removeAttribute('readonly');
+      $editBtn.innerText = '저장';
+      $editInput.focus();
+      console.log('edit');
+    } else if ($editBtn.textContent === '저장') {
+      $editInput.setAttribute('readonly', 'readonly');
+      // $editInput.blur();
+      $editBtn.innerText = '수정';
+
+      console.log('save');
+    }
+  };
+
+  // todo 수정 함수
+  const updateTodo = (e) => {
+    if (e.target.classList.contains('edit-btn')) {
+      updateTodoTitle(e);
+      console.log('click');
+      return;
+    }
+  };
+
+  // todo 삭제 함수
+  const deleteTodo = (e) => {
+    if (confirm('정말 삭제하시겠습니까?')) {
+      e.target.closest('li').remove();
+      updateToDoCount();
+    }
+  };
+  // 이벤트 위임
+  $('.main__todo').addEventListener('click', (e) => {
+    updateTodo(e);
+    // todo 삭제
+    if (e.target.classList.contains('delete-btn')) {
+      deleteTodo(e);
+    }
+  });
 
   // form 태그 새로고침 방지
   $('.main__input-container').addEventListener('submit', (e) => {
@@ -99,4 +108,3 @@ function App() {
 }
 
 const app = new App();
-app;
