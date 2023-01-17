@@ -7,26 +7,32 @@ function App() {
   // 1. 수정 버튼을 클릭하면 -> 저장 글씨 바뀜, input.focus()
   // 2. todo-title이 바뀔 수 있게
   // 3. 다시 저장 버튼을 클릭하면 -> 수정 글씨 바뀌고 입력된 title 저장, input.blur()
+  // const $editBtn = e.target.closest('li').querySelector('.edit-btn');
   const updateTodoTitle = (e) => {
-    const editBtn = e.target.closest('li').querySelector('.edit-btn');
-    const editInput = e.target.closest('li').querySelector('.todo-title');
+    const $editBtn = e.target.closest('li').querySelector('.edit-btn');
+    const $editInput = e.target.closest('li').querySelector('.todo-title');
 
-    if (editBtn.textContent === '수정') {
-      editInput.removeAttribute('readonly');
-      editInput.focus();
-      editInput.style.textDecoration = 'none';
-      editBtn.textContent = '저장';
+    if ($editBtn.textContent === '수정') {
+      $editInput.removeAttribute('readonly');
+      $editBtn.innerText = '저장';
+      $editInput.focus();
+      $editInput.style.textDecoration = 'none';
       console.log('edit');
-    } else if (editBtn.textContent === '저장') {
-      editInput.setAttribute('readonly', 'readonly');
-      editInput.blur();
-      editBtn.textContent = '수정';
+    } else if ($editBtn.textContent === '저장') {
+      $editInput.setAttribute('readonly', 'readonly');
+      $editInput.blur();
+      $editBtn.innerText = '수정';
       console.log('save');
     }
   };
 
-  // todo list 수정
-  $('.main__todo').addEventListener('click', updateTodoTitle);
+  $('.main__todo').addEventListener('click', (e) => {
+    e.preventDefault();
+    if (e.target.classList.contains('edit-btn')) {
+      updateTodoTitle(e);
+      return;
+    }
+  });
 
   // todo 갯수 업데이트
   const updateToDoCount = () => {
@@ -37,8 +43,6 @@ function App() {
   const addTodo = () => {
     const todo = $('.main__input-text').value;
     const todoTemplate = (todo) => {
-      let isEditing;
-      console.log(isEditing);
       return `
         <li class="main__todo-list" id="todo-id">
           <div class="main__todo-list--title-container">
@@ -68,7 +72,6 @@ function App() {
       return;
     }
     addTodo();
-    console.log('btn');
   });
 
   /** 엔터키 입력시 enter */
@@ -88,3 +91,4 @@ function App() {
 }
 
 const app = new App();
+app;

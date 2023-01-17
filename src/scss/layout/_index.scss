@@ -121,9 +121,14 @@ body {
       }
 
       &--title {
+        display: block;
         overflow: scroll;
         min-width: 60px;
         max-width: 400px;
+
+        &:active {
+          display: none;
+        }
       }
     }
   }
