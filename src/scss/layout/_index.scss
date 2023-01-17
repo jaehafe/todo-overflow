@@ -81,7 +81,8 @@ body {
     }
 
     &-text {
-      width: clamp(200px, 100%, 100%);
+      min-width: 200px;
+      width: 100%;
       margin-right: 6px;
       padding-left: 20px;
       border: 1px solid var(--main-color);
@@ -120,7 +121,9 @@ body {
       }
 
       &--title {
+        overflow: scroll;
         min-width: 60px;
+        max-width: 400px;
       }
     }
   }
@@ -157,7 +160,7 @@ body {
 @include u.breakpoint-down(xsmall) {
   .main__todo-list {
     flex-wrap: wrap;
-    justify-content: flex-end;
+    justify-content: center;
     &--btn-container {
       margin-top: 6px;
     }
