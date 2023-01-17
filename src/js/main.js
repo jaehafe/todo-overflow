@@ -3,27 +3,30 @@ import '../scss/style.scss';
 const $ = (selector) => document.querySelector(selector);
 
 function App() {
-  // todo list 수정
-  $('.main__todo').addEventListener('click', (e) => {
-    // 1. 수정 버튼을 클릭하면 -> 저장 글씨 바뀜, input.focus()
-    // 2. todo-title이 바뀔 수 있게
-    // 3. 다시 저장 버튼을 클릭하면 -> 수정 글씨 바뀌고 입력된 title 저장, input.blur()
+  // todo edit 함수
+  // 1. 수정 버튼을 클릭하면 -> 저장 글씨 바뀜, input.focus()
+  // 2. todo-title이 바뀔 수 있게
+  // 3. 다시 저장 버튼을 클릭하면 -> 수정 글씨 바뀌고 입력된 title 저장, input.blur()
+  const updateTodoTitle = (e) => {
     const editBtn = e.target.closest('li').querySelector('.edit-btn');
     const editInput = e.target.closest('li').querySelector('.todo-title');
 
-    editBtn.addEventListener('click', () => {
-      if (editBtn.textContent === '수정') {
-        editInput.removeAttribute('readonly');
-        editInput.focus();
-        editInput.style.textDecoration = 'none';
-        editBtn.textContent = '저장';
-      } else if (editBtn.textContent === '저장') {
-        editInput.setAttribute('readonly', 'readonly');
-        editInput.blur();
-        editBtn.textContent = '수정';
-      }
-    });
-  });
+    if (editBtn.textContent === '수정') {
+      editInput.removeAttribute('readonly');
+      editInput.focus();
+      editInput.style.textDecoration = 'none';
+      editBtn.textContent = '저장';
+      console.log('edit');
+    } else if (editBtn.textContent === '저장') {
+      editInput.setAttribute('readonly', 'readonly');
+      editInput.blur();
+      editBtn.textContent = '수정';
+      console.log('save');
+    }
+  };
+
+  // todo list 수정
+  $('.main__todo').addEventListener('click', updateTodoTitle);
 
   // todo 갯수 업데이트
   const updateToDoCount = () => {
