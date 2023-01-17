@@ -110,6 +110,7 @@ body {
         display: flex;
         align-items: center;
         gap: 16px;
+        width: 100%;
       }
       &--btn-container {
         display: flex;
@@ -123,11 +124,11 @@ body {
       &--title {
         display: block;
         overflow: scroll;
-        min-width: 60px;
-        max-width: 400px;
+        padding: 6px;
 
-        &:active {
-          display: none;
+        &:active,
+        &:focus {
+          outline: none;
         }
       }
     }
