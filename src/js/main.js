@@ -22,15 +22,23 @@ function App() {
       $editInput.setAttribute('readonly', 'readonly');
       $editInput.blur();
       $editBtn.innerText = '수정';
+      const updatedTodoTitle = $editInput.value;
       console.log('save');
     }
   };
 
   $('.main__todo').addEventListener('click', (e) => {
-    e.preventDefault();
+    // todo 수정
     if (e.target.classList.contains('edit-btn')) {
       updateTodoTitle(e);
       return;
+    }
+    // todo 삭제
+    if (e.target.classList.contains('delete-btn')) {
+      if (confirm('정말 삭제하시겠습니까?')) {
+        e.target.closest('li').remove();
+        updateToDoCount();
+      }
     }
   });
 
