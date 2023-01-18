@@ -5,6 +5,32 @@ const $ = (selector) => document.querySelector(selector);
 function App() {
   this.todo = [];
 
+  // this.init = () => {
+  //   render()
+  // }
+
+  const render = () => {
+    const template = this.todo
+      .map((todoItem, index) => {
+        return `
+        <li class="main__todo-list" data-todo-id="${index}">
+          <div class="main__todo-list--title-container">
+            <span class="main__todo-list--date">12-15</span>
+            <input type="text" readonly="readonly" class="main__todo-list--title todo-title" value="${todoItem.title}"/>
+          </div>
+          <div class="main__todo-list--btn-container">
+            <button class="main__todo-list--done-btn btn done-btn">완료</button>
+            <button class="main__todo-list--edit-btn btn edit-btn">수정</button>
+            <button class="main__todo-list--delete-btn btn delete-btn">삭제</button>
+          </div>
+        </li>`;
+      })
+      .join('');
+
+    $('.main__todo').innerHTML = template;
+    updateToDoCount();
+  };
+
   // todo 갯수 업데이트
   const updateToDoCount = () => {
     const todoTotalCount = $('.main__todo').querySelectorAll('li').length;
@@ -14,25 +40,7 @@ function App() {
   const addTodo = () => {
     const todo = $('.main__input-text').value;
     this.todo.push({ title: todo });
-    const template = this.todo
-      .map((todoItem) => {
-        return `
-      <li class="main__todo-list" id="todo-id">
-        <div class="main__todo-list--title-container">
-          <span class="main__todo-list--date">12-15</span>
-          <input readonly="readonly" class="main__todo-list--title todo-title" value="${todoItem.title}"/>
-        </div>
-        <div class="main__todo-list--btn-container">
-          <button class="main__todo-list--done-btn btn done-btn">완료</button>
-          <button class="main__todo-list--edit-btn btn edit-btn">수정</button>
-          <button class="main__todo-list--delete-btn btn delete-btn">삭제</button>
-        </div>
-      </li>`;
-      })
-      .join('');
-
-    $('.main__todo').innerHTML = template;
-    updateToDoCount();
+    render();
     $('.main__input-text').value = '';
   };
 
@@ -55,6 +63,9 @@ function App() {
       $editBtn.innerText = '수정';
       console.log('save');
     }
+    const todoId = e.target.closest('li').dataset.todoId;
+    console.log('todoId', todoId);
+    this.todo[todoId].title = $editInput.value;
   };
 
   // todo 수정 함수
@@ -69,6 +80,8 @@ function App() {
   // todo 삭제 함수
   const deleteTodo = (e) => {
     if (confirm('정말 삭제하시겠습니까?')) {
+      const todoId = e.target.closest('li').dataset.todoId;
+      this.todo.splice(todoId, 1);
       e.target.closest('li').remove();
       updateToDoCount();
     }
@@ -77,6 +90,7 @@ function App() {
   $('.main__todo').addEventListener('click', (e) => {
     // todo 수정
     updateTodo(e);
+
     // todo 삭제
     if (e.target.classList.contains('delete-btn')) {
       deleteTodo(e);
@@ -114,3 +128,4 @@ function App() {
 }
 
 const app = new App();
+app;
