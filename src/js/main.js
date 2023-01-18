@@ -3,6 +3,8 @@ import '../scss/style.scss';
 const $ = (selector) => document.querySelector(selector);
 
 function App() {
+  this.todo = [];
+
   // todo 갯수 업데이트
   const updateToDoCount = () => {
     const todoTotalCount = $('.main__todo').querySelectorAll('li').length;
@@ -11,21 +13,25 @@ function App() {
   // todo list 추가
   const addTodo = () => {
     const todo = $('.main__input-text').value;
-    const todoTemplate = (todo) => {
-      return `
-        <li class="main__todo-list" id="todo-id">
-          <div class="main__todo-list--title-container">
-            <span class="main__todo-list--date">12-15</span>
-            <input readonly class="main__todo-list--title todo-title" value="${todo}"/>
-          </div>
-          <div class="main__todo-list--btn-container">
-            <button class="main__todo-list--done-btn btn done-btn">완료</button>
-            <button class="main__todo-list--edit-btn btn edit-btn">수정</button>
-            <button class="main__todo-list--delete-btn btn delete-btn">삭제</button>
-          </div>
-        </li>`;
-    };
-    $('.main__todo').insertAdjacentHTML('afterbegin', todoTemplate(todo));
+    this.todo.push({ title: todo });
+    const template = this.todo
+      .map((todoItem) => {
+        return `
+      <li class="main__todo-list" id="todo-id">
+        <div class="main__todo-list--title-container">
+          <span class="main__todo-list--date">12-15</span>
+          <input readonly="readonly" class="main__todo-list--title todo-title" value="${todoItem.title}"/>
+        </div>
+        <div class="main__todo-list--btn-container">
+          <button class="main__todo-list--done-btn btn done-btn">완료</button>
+          <button class="main__todo-list--edit-btn btn edit-btn">수정</button>
+          <button class="main__todo-list--delete-btn btn delete-btn">삭제</button>
+        </div>
+      </li>`;
+      })
+      .join('');
+
+    $('.main__todo').innerHTML = template;
     updateToDoCount();
     $('.main__input-text').value = '';
   };
@@ -46,9 +52,7 @@ function App() {
       console.log('edit');
     } else if ($editBtn.textContent === '저장') {
       $editInput.setAttribute('readonly', 'readonly');
-      // $editInput.blur();
       $editBtn.innerText = '수정';
-
       console.log('save');
     }
   };
@@ -71,6 +75,7 @@ function App() {
   };
   // 이벤트 위임
   $('.main__todo').addEventListener('click', (e) => {
+    // todo 수정
     updateTodo(e);
     // todo 삭제
     if (e.target.classList.contains('delete-btn')) {
@@ -88,10 +93,11 @@ function App() {
       alert('할 일을 입력해주세요.');
       return;
     }
+
     addTodo();
   });
 
-  /** 엔터키 입력시 enter */
+  /** 엔터키 입력시 todo 추가 */
   // $('.main__input-text').addEventListener('keypress', (e) => {
   //   if (e.key !== 'Enter') {
   //     return;
