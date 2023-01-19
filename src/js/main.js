@@ -6,10 +6,10 @@ let tasks = [];
 
 // 할 일 개수 업데이트 함수
 const updateTaskCount = () => {
-  const taskCount = $('.main__todo').querySelectorAll('li').length;
-  $('.todo-total-count').innerHTML = `총 ${taskCount}개`;
+  // const taskCount = $('.main__todo').querySelectorAll('li').length;
+  // $('.todo-total-count').innerHTML = `총 ${taskCount}개`;
   const completedTaskArray = tasks.filter((task) => {
-    task.isCompleted === true;
+    return task.isCompleted === true;
   });
   $('.todo-total-count').textContent = `할 일 전체 ${tasks.length}개`;
   $('.completed-task').textContent = `완료 ${completedTaskArray.length}개`;
@@ -25,14 +25,14 @@ $('.main__todo').addEventListener('click', (e) => {
 
     deleteTask(taskId);
     e.target.closest('li').remove();
+    updateTaskCount();
   }
 });
 
 const deleteTask = (taskId) => {
-  tasks = tasks.filter((task) => {
-    task.id !== Number(taskId);
+  tasks.filter((task) => {
+    return task.id !== Number(taskId);
   });
-  updateTaskCount();
 };
 
 // 할 일 추가
