@@ -8,9 +8,7 @@ let tasks = [];
 const updateTaskCount = () => {
   // const taskCount = $('.main__todo').querySelectorAll('li').length;
   // $('.todo-total-count').innerHTML = `총 ${taskCount}개`;
-  const completedTaskArray = tasks.filter((task) => {
-    return task.isCompleted === true;
-  });
+  const completedTaskArray = tasks.filter((task) => task.isCompleted === true);
   $('.todo-total-count').textContent = `할 일 전체 ${tasks.length}개`;
   $('.completed-task').textContent = `완료 ${completedTaskArray.length}개`;
   $('.remaining-task').textContent = `하는 중${
@@ -21,18 +19,17 @@ const updateTaskCount = () => {
 // 할 일 제거 함수
 $('.main__todo').addEventListener('click', (e) => {
   if (e.target.classList.contains('delete-btn')) {
-    const taskId = e.target.closest('li').id;
+    let taskId = e.target.closest('li').dataset.todoId;
 
     deleteTask(taskId);
-    e.target.closest('li').remove();
-    updateTaskCount();
+    console.log(tasks);
+    render();
   }
 });
 
 const deleteTask = (taskId) => {
-  tasks.filter((task) => {
-    return task.id !== Number(taskId);
-  });
+  const filtered = tasks.filter((task) => Number(taskId) !== task.id);
+  tasks = filtered;
 };
 
 // 할 일 추가
@@ -66,7 +63,15 @@ const createTask = (task) => {
   if (task.isCompleted) {
     $('.main__todo-list').classList.add('complete');
   }
-  const template = `
+  console.log(task);
+  render();
+};
+
+const render = () => {
+  console.log(tasks);
+  const template = tasks
+    .map((task) => {
+      return `
     <li class="main__todo-list" data-todo-id="${task.id}">
       <div class="main__todo-list--title-container">
         <span class="main__todo-list--date">${month}/${date}</span>
@@ -88,23 +93,24 @@ const createTask = (task) => {
       </div>
     </li>
     `;
+    })
+    .join('');
 
-  $('.main__todo').innerHTML += template;
+  $('.main__todo').innerHTML = template;
   $('.main__input-text').value = '';
   updateTaskCount();
 };
 
 // 할 일 수정
-$('.main__todo').addEventListener('click', (e) => {
-  const taskList = e.target.closest('li');
-  console.log(taskList);
-  if (taskList.querySelector('.edit-btn').textContent === '수정') {
-    const inputValue = taskList.querySelector('.todo-title');
-    inputValue.focus();
-    taskList.querySelector('.todo-title').setAttribute = 'contenteditable';
-    taskList.querySelector('.edit-btn').textContent = '저장';
-  }
-  // else if(taskList.querySelector('.edit-btn').textContent === '저장') {
+// $('.main__todo').addEventListener('click', (e) => {
+//   const taskList = e.target.closest('li');
+//   if (taskList.querySelector('.edit-btn').textContent === '수정') {
+//     const inputValue = taskList.querySelector('.todo-title');
+//     inputValue.focus();
+//     taskList.querySelector('.todo-title').setAttribute = 'contenteditable';
+//     taskList.querySelector('.edit-btn').textContent = '저장';
+//   }
+//   // else if(taskList.querySelector('.edit-btn').textContent === '저장') {
 
-  // }
-});
+//   // }
+// });
