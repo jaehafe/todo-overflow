@@ -47,6 +47,7 @@ $('.main__todo').addEventListener('click', (e) => {
       $editBtn.innerText = '수정';
 
       tasks[titleIndex].name = editedTaskTitle;
+      render();
     }
   }
 });
