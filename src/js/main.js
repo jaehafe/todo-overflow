@@ -27,28 +27,32 @@ const updateTaskCount = () => {
  * 2. ('.todo-title')에 입력된 값이 task.name에 새로 할당한다.
  * 3. 다시 렌더링한다(render 함수 사용)
  */
-$('.main__todo').addEventListener('click', (e) => {
+const editTaskName = (e) => {
   const taskId = e.target.closest('li').dataset.todoId;
   const taskObj = tasks.find((task) => task.id === Number(taskId));
   const title = tasks.map((task) => task === taskObj);
   const titleIndex = title.indexOf(true);
-
-  console.log(taskId);
+  // console.log(taskId);
   const $editBtn = e.target.closest('li').querySelector('.edit-btn');
   const $taskTitle = e.target.closest('li').querySelector('.todo-title');
-  if (e.target.classList.contains('edit-btn')) {
-    if ($editBtn.innerText.trim() === '수정') {
-      $taskTitle.focus();
-      $taskTitle.setAttribute('contenteditable', 'true');
-      $editBtn.innerText = '저장';
-    } else if ($editBtn.innerText.trim() === '저장') {
-      const editedTaskTitle = $taskTitle.innerText;
-      $taskTitle.setAttribute('contenteditable', 'false');
-      $editBtn.innerText = '수정';
 
-      tasks[titleIndex].name = editedTaskTitle;
-      render();
-    }
+  if ($editBtn.innerText.trim() === '수정') {
+    $taskTitle.focus();
+    $taskTitle.setAttribute('contenteditable', 'true');
+    $editBtn.innerText = '저장';
+  } else if ($editBtn.innerText.trim() === '저장') {
+    const editedTaskTitle = $taskTitle.innerText;
+    $taskTitle.setAttribute('contenteditable', 'false');
+    $editBtn.innerText = '수정';
+
+    tasks[titleIndex].name = editedTaskTitle;
+    render();
+  }
+};
+
+$('.main__todo').addEventListener('click', (e) => {
+  if (e.target.classList.contains('edit-btn')) {
+    editTaskName(e);
   }
 });
 
