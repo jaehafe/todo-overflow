@@ -41,10 +41,12 @@
           </button>
         </form>
         <ul class="main__todo">
-          <!-- <li class="main__todo-list" id="todo-id">
+          <!-- <li class="main__todo-list" data-todo-id="${index}">
             <div class="main__todo-list--title-container">
               <span class="main__todo-list--date">12-15</span>
-              <input class="main__todo-list--title todo-title" value="${todo}"/>
+              <input type="text" readonly="readonly" 
+                class="main__todo-list--title todo-title" value="${todoItem.title}"
+              />
             </div>
             <div class="main__todo-list--btn-container">
               <button class="main__todo-list--done-btn btn done-btn">완료</button>
