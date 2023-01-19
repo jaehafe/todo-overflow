@@ -16,17 +16,67 @@ const updateTaskCount = () => {
   }개`;
 };
 
+// 할 일 수정
+/**
+ * 저장버튼일때
+ * 1. '수정' 버튼을 클릭하면 '저장'으로 바뀐다.
+ * 2. task title에 focus된다. ('.todo-title')의 속성 contenteditable이 true로 된다(수정 가능)
+ * 3.
+ *
+ * 1. 저장 버튼을 클릭하면 ('.todo-title')의 속성 contenteditable이 false 된다(수정 불가능)
+ * 2. ('.todo-title')에 입력된 값이 task.name에 새로 할당한다.
+ * 3. 다시 렌더링한다(render 함수 사용)
+ */
+$('.main__todo').addEventListener('click', (e) => {
+  const taskId = e.target.closest('li').dataset.todoId;
+  const taskObj = tasks.find((task) => task.id === Number(taskId));
+  const title = tasks.map((task) => task === taskObj);
+  const titleIndex = title.indexOf(true);
+
+  console.log(taskId);
+  const $editBtn = e.target.closest('li').querySelector('.edit-btn');
+  const $taskTitle = e.target.closest('li').querySelector('.todo-title');
+  if (e.target.classList.contains('edit-btn')) {
+    if ($editBtn.innerText.trim() === '수정') {
+      $taskTitle.focus();
+      $taskTitle.setAttribute('contenteditable', 'true');
+      $editBtn.innerText = '저장';
+    } else if ($editBtn.innerText.trim() === '저장') {
+      const editedTaskTitle = $taskTitle.innerText;
+      $taskTitle.setAttribute('contenteditable', 'false');
+      $editBtn.innerText = '수정';
+
+      tasks[titleIndex].name = editedTaskTitle;
+    }
+  }
+});
+
+//
+// const editTask = (taskId, el) => {
+//   const task = tasks.find((task) => task.id === Number(taskId));
+
+//   if (el.hasAttribute('contenteditable')) {
+//     task.name = el.textContent;
+//   } else {
+//     const span = el.nextElementSiblings;
+//     task.isCompleted = !task.isCompleted;
+
+//     if (task.isCompleted) {
+//     }
+//   }
+// };
+
 // 할 일 제거 함수
 $('.main__todo').addEventListener('click', (e) => {
   if (e.target.classList.contains('delete-btn')) {
     let taskId = e.target.closest('li').dataset.todoId;
+    console.log(tasks);
 
     deleteTask(taskId);
-    console.log(tasks);
     render();
   }
 });
-
+// filter함수
 const deleteTask = (taskId) => {
   const filtered = tasks.filter((task) => Number(taskId) !== task.id);
   tasks = filtered;
@@ -63,10 +113,10 @@ const createTask = (task) => {
   if (task.isCompleted) {
     $('.main__todo-list').classList.add('complete');
   }
-  console.log(task);
   render();
 };
 
+// 렌더
 const render = () => {
   console.log(tasks);
   const template = tasks
@@ -76,6 +126,7 @@ const render = () => {
       <div class="main__todo-list--title-container">
         <span class="main__todo-list--date">${month}/${date}</span>
         <span
+          contenteditable="false"
           class="main__todo-list--title todo-title"
           >${task.name}</span
         >
