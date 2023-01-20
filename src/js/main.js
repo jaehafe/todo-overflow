@@ -11,7 +11,7 @@ const updateTaskCount = () => {
   const completedTaskArray = tasks.filter((task) => task.isCompleted === true);
   $('.todo-total-count').textContent = `할 일 전체 ${tasks.length}개`;
   $('.completed-task').textContent = `완료 ${completedTaskArray.length}개`;
-  $('.remaining-task').textContent = `하는 중${
+  $('.remaining-task').textContent = `하는 중 ${
     tasks.length - completedTaskArray.length
   }개`;
 };
@@ -67,18 +67,14 @@ $('.main__todo').addEventListener('click', (e) => {
 // 할 일 완료 함수
 const completeTask = (e) => {
   const $doneBtn = e.target.closest('li').querySelector('.done-btn');
+  const $taskId = e.target.closest('li').dataset.todoId;
+  let taskObj = tasks.find((task) => task.id === Number($taskId));
 
-  const taskId = e.target.closest('li').dataset.todoId;
-  let taskObj = tasks.find((task) => task.id === Number(taskId));
-
-  console.log(taskObj.isCompleted);
-
-  console.log(taskId);
-
-  if ($doneBtn.innerText.trim() === '하는 중') {
-    $doneBtn.innerText = '완료';
-  } else if ($doneBtn.innerText.trim() === '완료') {
-    $doneBtn.innerText = '하는 중';
+  if ($doneBtn.textContent.trim() === '하는 중') {
+    console.log($doneBtn.textContent.trim());
+    // $doneBtn.textContent = '완료';
+  } else if ($doneBtn.textContent.trim() === '완료') {
+    // $doneBtn.textContent = '하는 중';
   }
   taskObj.isCompleted = !taskObj.isCompleted;
   render();
@@ -95,8 +91,6 @@ $('.main__todo').addEventListener('click', (e) => {
 $('.main__todo').addEventListener('click', (e) => {
   if (e.target.classList.contains('delete-btn')) {
     let taskId = e.target.closest('li').dataset.todoId;
-    console.log(tasks);
-
     deleteTask(taskId);
   }
   return;
@@ -161,7 +155,7 @@ const render = () => {
       </div>
       <div class="main__todo-list--btn-container">
         <button class="main__todo-list--done-btn btn done-btn">
-          하는중
+        ${task.isCompleted ? '완료' : '하는 중'}
         </button>
         <button class="main__todo-list--edit-btn btn edit-btn">
           수정
