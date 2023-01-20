@@ -65,24 +65,28 @@ $('.main__todo').addEventListener('click', (e) => {
  * 2.
  */
 // 할 일 완료 함수
+const completeTask = (e) => {
+  const $doneBtn = e.target.closest('li').querySelector('.done-btn');
+
+  const taskId = e.target.closest('li').dataset.todoId;
+  let taskObj = tasks.find((task) => task.id === Number(taskId));
+
+  console.log(taskObj.isCompleted);
+
+  console.log(taskId);
+
+  if ($doneBtn.innerText.trim() === '하는 중') {
+    $doneBtn.innerText = '완료';
+  } else if ($doneBtn.innerText.trim() === '완료') {
+    $doneBtn.innerText = '하는 중';
+  }
+  taskObj.isCompleted = !taskObj.isCompleted;
+  render();
+};
+// 할 일 완료
 $('.main__todo').addEventListener('click', (e) => {
   if (e.target.classList.contains('done-btn')) {
-    const $doneBtn = e.target.closest('li').querySelector('.done-btn');
-
-    const taskId = e.target.closest('li').dataset.todoId;
-    let taskObj = tasks.find((task) => task.id === Number(taskId));
-
-    console.log(taskObj.isCompleted);
-
-    console.log(taskId);
-
-    if ($doneBtn.innerText.trim() === '하는 중') {
-      $doneBtn.innerText = '완료';
-    } else if ($doneBtn.innerText.trim() === '완료') {
-      $doneBtn.innerText = '하는 중';
-    }
-    taskObj.isCompleted = !taskObj.isCompleted;
-    render();
+    completeTask(e);
     return;
   }
 });
