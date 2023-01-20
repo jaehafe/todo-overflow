@@ -27,49 +27,65 @@ const updateTaskCount = () => {
  * 2. ('.todo-title')에 입력된 값이 task.name에 새로 할당한다.
  * 3. 다시 렌더링한다(render 함수 사용)
  */
+// 할 일 이름 수정 함수
 const editTaskName = (e) => {
   const taskId = e.target.closest('li').dataset.todoId;
   const taskObj = tasks.find((task) => task.id === Number(taskId));
-  const title = tasks.map((task) => task === taskObj);
-  const titleIndex = title.indexOf(true);
+  console.log(taskObj.name);
+  // const title = tasks.map((task) => task === taskObj);
+  // const titleIndex = title.indexOf(true);
   // console.log(taskId);
   const $editBtn = e.target.closest('li').querySelector('.edit-btn');
   const $taskTitle = e.target.closest('li').querySelector('.todo-title');
 
   if ($editBtn.innerText.trim() === '수정') {
-    $taskTitle.focus();
     $taskTitle.setAttribute('contenteditable', 'true');
     $editBtn.innerText = '저장';
   } else if ($editBtn.innerText.trim() === '저장') {
+    $taskTitle.focus();
     const editedTaskTitle = $taskTitle.innerText;
     $taskTitle.setAttribute('contenteditable', 'false');
     $editBtn.innerText = '수정';
 
-    tasks[titleIndex].name = editedTaskTitle;
+    // tasks[titleIndex].name = editedTaskTitle;
+    taskObj.name = editedTaskTitle;
     render();
   }
 };
-
+// 할 일 이름 수정 함수
 $('.main__todo').addEventListener('click', (e) => {
   if (e.target.classList.contains('edit-btn')) {
     editTaskName(e);
+    return;
   }
 });
 
-//
-// const editTask = (taskId, el) => {
-//   const task = tasks.find((task) => task.id === Number(taskId));
+/**
+ * 1. 완료 버튼을 클릭하면, 클릭한 task li에 classList.add (complete)
+ * 2.
+ */
+// 할 일 완료 함수
+$('.main__todo').addEventListener('click', (e) => {
+  if (e.target.classList.contains('done-btn')) {
+    const $doneBtn = e.target.closest('li').querySelector('.done-btn');
 
-//   if (el.hasAttribute('contenteditable')) {
-//     task.name = el.textContent;
-//   } else {
-//     const span = el.nextElementSiblings;
-//     task.isCompleted = !task.isCompleted;
+    const taskId = e.target.closest('li').dataset.todoId;
+    let taskObj = tasks.find((task) => task.id === Number(taskId));
 
-//     if (task.isCompleted) {
-//     }
-//   }
-// };
+    console.log(taskObj.isCompleted);
+
+    console.log(taskId);
+
+    if ($doneBtn.innerText.trim() === '하는 중') {
+      $doneBtn.innerText = '완료';
+    } else if ($doneBtn.innerText.trim() === '완료') {
+      $doneBtn.innerText = '하는 중';
+    }
+    taskObj.isCompleted = !taskObj.isCompleted;
+    render();
+    return;
+  }
+});
 
 // 할 일 제거 함수
 $('.main__todo').addEventListener('click', (e) => {
@@ -78,13 +94,14 @@ $('.main__todo').addEventListener('click', (e) => {
     console.log(tasks);
 
     deleteTask(taskId);
-    render();
   }
+  return;
 });
 // filter함수
 const deleteTask = (taskId) => {
   const filtered = tasks.filter((task) => Number(taskId) !== task.id);
   tasks = filtered;
+  render();
 };
 
 // 할 일 추가
@@ -127,7 +144,9 @@ const render = () => {
   const template = tasks
     .map((task) => {
       return `
-    <li class="main__todo-list" data-todo-id="${task.id}">
+    <li class="main__todo-list ${
+      task.isCompleted ? 'complete' : ''
+    }" data-todo-id="${task.id}">
       <div class="main__todo-list--title-container">
         <span class="main__todo-list--date">${month}/${date}</span>
         <span
@@ -138,7 +157,7 @@ const render = () => {
       </div>
       <div class="main__todo-list--btn-container">
         <button class="main__todo-list--done-btn btn done-btn">
-          완료
+          하는중
         </button>
         <button class="main__todo-list--edit-btn btn edit-btn">
           수정
