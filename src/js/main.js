@@ -4,6 +4,7 @@ const nowTime = moment().format('M/DD H:m:s');
 console.log(nowTime);
 
 const $ = (selector) => document.querySelector(selector);
+const BASE_URL = 'https://asia-northeast3-heropy-api.cloudfunctions.net/api';
 
 let tasks = [];
 
@@ -15,7 +16,7 @@ const init = async () => {};
 const updateTaskCount = () => {
   // const taskCount = $('.main__todo').querySelectorAll('li').length;
   // $('.todo-total-count').innerHTML = `총 ${taskCount}개`;
-  const completedTaskArray = tasks.filter((task) => task.isCompleted === true);
+  const completedTaskArray = tasks.filter((task) => task.done === true);
   $('.todo-total-count').textContent = `할 일 전체 ${tasks.length}개`;
   $('.completed-task').textContent = `완료 ${completedTaskArray.length}개`;
   $('.remaining-task').textContent = `하는 중 ${
@@ -83,7 +84,7 @@ const completeTask = (e) => {
   } else if ($doneBtn.textContent.trim() === '완료') {
     // $doneBtn.textContent = '하는 중';
   }
-  taskObj.isCompleted = !taskObj.isCompleted;
+  taskObj.done = !taskObj.done;
   render();
 };
 // 할 일 완료
@@ -113,6 +114,30 @@ const deleteTask = (taskId) => {
 $('#todo-add-btn').addEventListener('click', (e) => {
   e.preventDefault();
 
+  createTask();
+});
+
+// 할 일 추가 함수
+const createTask = async () => {
+  // const res = await fetch(`${BASE_URL}/todos`, {
+  //   method: 'POST',
+  //   headers: {
+  //     'content-type': 'application/json',
+  //     apikey: 'FcKdtJs202301',
+  //     username: 'KDT4_LeeJaeHa',
+  //   },
+  //   body: JSON.stringify({
+  //     id: task.id,
+  //     order: task[task.id],
+  //     title: task.title,
+  //     done: task.done,
+  //     createdAt: task.createdAt,
+  //     updatedAt: task.updatedAt,
+  //   }),
+  // });
+  // const data = res.json();
+  // console.log(data);
+
   const inputValue = $('.main__input-text').value;
 
   if (inputValue.trim() === '') {
@@ -128,36 +153,9 @@ $('#todo-add-btn').addEventListener('click', (e) => {
     createdAt: `${nowTime}`,
     updatedAt: `${nowTime}`,
   };
-
   tasks.push(task);
 
-  createTask(task);
   $('.main__input-text').focus();
-});
-
-// 할 일 추가 함수
-const createTask = async (task) => {
-  const res = await fetch(
-    'https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos',
-    {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        apikey: 'FcKdtJs202301',
-        username: 'KDT4_LeeJaeHa',
-      },
-      body: JSON.stringify({
-        id: task.id,
-        order: task[task.id],
-        title: task.title,
-        done: task.done,
-        createdAt: task.createdAt,
-      }),
-    }
-  );
-  const data = res.json();
-  console.log(data);
-
   if (task.done) {
     $('.main__todo-list').classList.add('complete');
   }
