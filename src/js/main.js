@@ -52,7 +52,7 @@ const editTaskName = (e) => {
     render();
   }
 };
-// 할 일 이름 수정 함수
+// 할 일 이름 수정
 $('.main__todo').addEventListener('click', (e) => {
   if (e.target.classList.contains('edit-btn')) {
     editTaskName(e);
@@ -87,7 +87,7 @@ $('.main__todo').addEventListener('click', (e) => {
   }
 });
 
-// 할 일 제거 함수
+// 할 일 삭제
 $('.main__todo').addEventListener('click', (e) => {
   if (e.target.classList.contains('delete-btn')) {
     let taskId = e.target.closest('li').dataset.todoId;
@@ -95,7 +95,7 @@ $('.main__todo').addEventListener('click', (e) => {
   }
   return;
 });
-// filter함수
+// 할 일 삭제 함수
 const deleteTask = (taskId) => {
   const filtered = tasks.filter((task) => Number(taskId) !== task.id);
   tasks = filtered;
@@ -173,17 +173,3 @@ const render = () => {
   $('.main__input-text').value = '';
   updateTaskCount();
 };
-
-// 할 일 수정
-// $('.main__todo').addEventListener('click', (e) => {
-//   const taskList = e.target.closest('li');
-//   if (taskList.querySelector('.edit-btn').textContent === '수정') {
-//     const inputValue = taskList.querySelector('.todo-title');
-//     inputValue.focus();
-//     taskList.querySelector('.todo-title').setAttribute = 'contenteditable';
-//     taskList.querySelector('.edit-btn').textContent = '저장';
-//   }
-//   // else if(taskList.querySelector('.edit-btn').textContent === '저장') {
-
-//   // }
-// });
