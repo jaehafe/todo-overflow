@@ -31,7 +31,7 @@ const updateTaskCount = () => {
 const editTaskName = (e) => {
   const taskId = e.target.closest('li').dataset.todoId;
   const taskObj = tasks.find((task) => task.id === Number(taskId));
-  console.log(taskObj.name);
+  console.log(taskObj.title);
   // const title = tasks.map((task) => task === taskObj);
   // const titleIndex = title.indexOf(true);
   // console.log(taskId);
@@ -48,7 +48,7 @@ const editTaskName = (e) => {
     $editBtn.innerText = '수정';
 
     // tasks[titleIndex].name = editedTaskTitle;
-    taskObj.name = editedTaskTitle;
+    taskObj.title = editedTaskTitle;
     render();
   }
 };
@@ -115,8 +115,11 @@ $('#todo-add-btn').addEventListener('click', (e) => {
 
   const task = {
     id: new Date().getTime(),
-    name: inputValue,
-    isCompleted: false,
+    order: '',
+    title: inputValue,
+    done: false,
+    createdAt: '',
+    updatedAt: '',
   };
 
   tasks.push(task);
@@ -130,7 +133,7 @@ let date = new Date().getDate();
 
 // 할 일 추가 함수
 const createTask = (task) => {
-  if (task.isCompleted) {
+  if (task.done) {
     $('.main__todo-list').classList.add('complete');
   }
   render();
@@ -142,20 +145,20 @@ const render = () => {
   const template = tasks
     .map((task) => {
       return `
-    <li class="main__todo-list ${
-      task.isCompleted ? 'complete' : ''
-    }" data-todo-id="${task.id}">
+    <li class="main__todo-list ${task.done ? 'complete' : ''}" data-todo-id="${
+        task.id
+      }">
       <div class="main__todo-list--title-container">
         <span class="main__todo-list--date">${month}/${date}</span>
         <span
           contenteditable="false"
           class="main__todo-list--title todo-title"
-          >${task.name}</span
+          >${task.title}</span
         >
       </div>
       <div class="main__todo-list--btn-container">
         <button class="main__todo-list--done-btn btn done-btn">
-        ${task.isCompleted ? '완료' : '하는 중'}
+        ${task.done ? '완료' : '하는 중'}
         </button>
         <button class="main__todo-list--edit-btn btn edit-btn">
           수정
