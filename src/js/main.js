@@ -1,8 +1,15 @@
 import '../scss/style.scss';
+import moment from 'moment';
+const nowTime = moment().format('M/DD H:m:s');
+console.log(nowTime);
 
 const $ = (selector) => document.querySelector(selector);
 
 let tasks = [];
+
+const init = async () => {};
+
+// 렌더
 
 // 할 일 개수 업데이트 함수
 const updateTaskCount = () => {
@@ -118,8 +125,8 @@ $('#todo-add-btn').addEventListener('click', (e) => {
     order: '',
     title: inputValue,
     done: false,
-    createdAt: '',
-    updatedAt: '',
+    createdAt: `${nowTime}`,
+    updatedAt: `${nowTime}`,
   };
 
   tasks.push(task);
@@ -128,20 +135,45 @@ $('#todo-add-btn').addEventListener('click', (e) => {
   $('.main__input-text').focus();
 });
 
-let month = new Date().getMonth() + 1;
-let date = new Date().getDate();
-
 // 할 일 추가 함수
-const createTask = (task) => {
+const createTask = async (task) => {
+  const res = await fetch(
+    'https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos',
+    {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        apikey: 'FcKdtJs202301',
+        username: 'KDT4_LeeJaeHa',
+      },
+      body: JSON.stringify({
+        id: task.id,
+        order: task[task.id],
+        title: task.title,
+        done: task.done,
+        createdAt: task.createdAt,
+      }),
+    }
+  );
+  const data = res.json();
+  console.log(data);
+
   if (task.done) {
     $('.main__todo-list').classList.add('complete');
   }
   render();
 };
 
-// 렌더
-const render = () => {
+const render = async () => {
   console.log(tasks);
+
+  // const res = await fetch(
+  //   'https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos'
+  // );
+  // const data = res.json();
+  // tasks = data;
+  // console.log(data);
+
   const template = tasks
     .map((task) => {
       return `
@@ -149,7 +181,9 @@ const render = () => {
         task.id
       }">
       <div class="main__todo-list--title-container">
-        <span class="main__todo-list--date">${month}/${date}</span>
+        <span class="main__todo-list--date">${
+          task.updatedAt ? task.updatedAt : task.createdAt
+        }</span>
         <span
           contenteditable="false"
           class="main__todo-list--title todo-title"
@@ -176,3 +210,5 @@ const render = () => {
   $('.main__input-text').value = '';
   updateTaskCount();
 };
+
+window.addEventListener('DOMContentLoaded', init);

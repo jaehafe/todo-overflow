@@ -15,5 +15,8 @@
   "main": "index.js",
   "repository": "https://github.com/jaehafe/todo-overflow.git",
   "author": "Jaeha Lee <wogkdkrm112@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "moment": "^2.29.4"
+  }
 }
