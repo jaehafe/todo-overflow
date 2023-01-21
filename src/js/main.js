@@ -168,6 +168,7 @@ $('#todo-add-btn').addEventListener('click', (e) => {
   e.preventDefault();
 
   createTask();
+
   return;
 });
 
