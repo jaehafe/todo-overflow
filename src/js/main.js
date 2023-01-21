@@ -7,21 +7,56 @@ const $ = (selector) => document.querySelector(selector);
 const BASE_URL =
   'https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos';
 
+const TaskApi = {
+  async getAllTask() {
+    const res = await fetch(`${BASE_URL}`, {
+      method: 'GET',
+      headers: {
+        'content-type': 'application/json',
+        apikey: 'FcKdtJs202301',
+        username: 'KDT4_LeeJaeHa',
+      },
+    });
+
+    return res.json();
+  },
+
+  async addTask(inputValue) {
+    // const task = {
+    //   id: new Date().getTime(),
+    //   order: '',
+    //   title: inputValue,
+    //   done: false,
+    //   createdAt: `${nowTime}`,
+    //   updatedAt: `${nowTime}`,
+    // };
+
+    // POST api 요청
+    const res = await fetch(`${BASE_URL}`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        apikey: 'FcKdtJs202301',
+        username: 'KDT4_LeeJaeHa',
+      },
+      body: JSON.stringify({
+        // id: task.id,
+        // order: task[task.id],
+        title: inputValue,
+        // done: task.done,
+        // createdAt: task.createdAt,
+        // updatedAt: task.updatedAt,
+      }),
+    });
+
+    return await res.json();
+  },
+};
+
 let tasks = [];
 
 const init = async () => {
-  const resp = await fetch(`${BASE_URL}`, {
-    method: 'GET',
-    headers: {
-      'content-type': 'application/json',
-      apikey: 'FcKdtJs202301',
-      username: 'KDT4_LeeJaeHa',
-    },
-  });
-  const dataGet = await resp.json();
-  console.log(dataGet);
-  console.log(tasks);
-  tasks = dataGet;
+  tasks = await TaskApi.getAllTask();
 
   $('.main__input-text').focus();
   // if (task.done) {
@@ -29,8 +64,6 @@ const init = async () => {
   // }
   render();
 };
-
-// 렌더
 
 // 할 일 개수 업데이트 함수
 const updateTaskCount = () => {
@@ -131,52 +164,30 @@ const deleteTask = (taskId) => {
 };
 
 // 할 일 추가
-$('#todo-add-btn').addEventListener('click', async (e) => {
+$('#todo-add-btn').addEventListener('click', (e) => {
   e.preventDefault();
 
-  await createTask();
+  createTask();
+  return;
 });
 
 // 할 일 추가 함수
 const createTask = async () => {
-  const inputValue = $('.main__input-text').value;
+  let inputValue = $('.main__input-text').value;
 
   if (inputValue.trim() === '') {
     alert('할 일을 입력하세요');
     return;
   }
-  // const task = {
-  //   id: new Date().getTime(),
-  //   order: '',
-  //   title: inputValue,
-  //   done: false,
-  //   createdAt: `${nowTime}`,
-  //   updatedAt: `${nowTime}`,
-  // };
 
-  // POST api 요청
-  const res = await fetch(`${BASE_URL}`, {
-    method: 'POST',
-    headers: {
-      'content-type': 'application/json',
-      apikey: 'FcKdtJs202301',
-      username: 'KDT4_LeeJaeHa',
-    },
-    body: JSON.stringify({
-      // id: task.id,
-      // order: task[task.id],
-      title: inputValue,
-      // done: task.done,
-      // createdAt: task.createdAt,
-      // updatedAt: task.updatedAt,
-    }),
-  });
-  console.log(res);
-  const data = res.json();
-  console.log(data);
+  // tasks = await TaskApi.addTask(inputValue);
+  await TaskApi.addTask(inputValue);
+  render();
+  inputValue = '';
 };
 
 const render = async () => {
+  tasks = await TaskApi.getAllTask();
   const template = tasks
     .map((task) => {
       return `
@@ -214,4 +225,5 @@ const render = async () => {
   updateTaskCount();
 };
 
+// 최초 화면 로드 시 렌더링
 window.addEventListener('DOMContentLoaded', init);
