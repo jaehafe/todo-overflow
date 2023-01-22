@@ -23,23 +23,9 @@ const TaskApi = {
     console.log(data);
     return data;
   },
-  // id: task.id,
-  // order: '',
-  // done: task.done,
-  // createdAt: task.createdAt,
-  // updatedAt: task.updatedAt,
 
   // task 추가 api
-  async createTask(name) {
-    // const task = {
-    //   id: new Date().getTime(),
-    //   order: '',
-    //   title: inputValue,
-    //   done: false,
-    //   createdAt: `${nowTime}`,
-    //   updatedAt: `${nowTime}`,
-    // };
-
+  async createTask(name, order) {
     // POST api 요청
     const res = await fetch(`${BASE_URL}`, {
       method: 'POST',
@@ -50,6 +36,7 @@ const TaskApi = {
       },
       body: JSON.stringify({
         title: name,
+        order,
       }),
     });
     return await res.json();
@@ -76,6 +63,28 @@ const TaskApi = {
       console.log(err);
     }
   },
+
+  // task(reorder) 업데이트 api
+  // https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos/:todoId
+  // async reorderTask(todoId, name, done) {
+  //   try {
+  //     const res = await fetch(`${BASE_URL}/${todoId}`, {
+  //       method: 'PUT',
+  //       headers: {
+  //         'content-type': 'application/json',
+  //         apikey: 'FcKdtJs202301',
+  //         username: 'KDT4_LeeJaeHa',
+  //       },
+  //       body: JSON.stringify({
+  //         title: name,
+  //         done: done,
+  //       }),
+  //     });
+  //     return await res.json();
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // },
 
   // task 삭제 api
   // https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos/:todoId
@@ -131,7 +140,7 @@ const updateTaskCount = () => {
  * 2. ('.todo-title')에 입력된 값이 task.name에 새로 할당한다.
  * 3. 다시 렌더링한다(render 함수 사용)
  */
-// 할 일 이름 수정 함수
+// 할 일 수정 함수
 const updateTask = async (e) => {
   const $taskId = e.target.closest('li').dataset.todoId;
   const taskObj = tasks.find((task) => task.id === $taskId);
@@ -255,9 +264,16 @@ new Sortable(drag, {
   animation: 150,
 });
 
-const slicedDate = (date) => {
-  return date.slice(5, 10);
+/** createdAt, updatedAt 조작 */
+const formattedDate = (taskDate) => {
+  const date = new Date(taskDate);
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const today = String(date.getDate()).padStart(2, '0');
+  const hour = String(date.getHours()).padStart(2, '0');
+  const min = String(date.getMinutes()).padStart(2, '0');
+  return `${month}/${today} ${hour}:${min}`;
 };
+
 const render = async () => {
   tasks = await TaskApi.getAllTask();
   const template = tasks
@@ -265,13 +281,16 @@ const render = async () => {
       return `
     <li class="main__todo-list ${task.done ? 'complete' : ''}" data-todo-id="${
         task.id
-      }">
+      }" data-todo-order="${task.order}">
       <div class="main__todo-list--title-container">
-        <span class="main__todo-list--date">${
-          slicedDate(task.updatedAt)
-            ? slicedDate(task.updatedAt)
-            : slicedDate(task.createdAt)
-        }</span>
+        <div>
+          <span class="main__todo-list--date createdAt">생성: ${formattedDate(
+            task.createdAt
+          )}</span>
+          <span class="main__todo-list--date updatedAt">수정: ${formattedDate(
+            task.updatedAt
+          )}</span>
+        </div>
         <span
           contenteditable="false"
           class="main__todo-list--title todo-title"
