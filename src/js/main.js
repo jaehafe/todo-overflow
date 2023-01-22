@@ -204,24 +204,27 @@ const deleteTask = async (e) => {
   render();
 };
 
-// 전체 삭제
+// 할 일 '전체 삭제'
 /**
  * 1. '전체삭제' 버튼을 클릭하면 li 전체 삭제
  * 2. task id만 추출
  * 3. ul 태그 안에 있는 li 길이만큼 순회하면서 삭제
  */
-$('.main__header-delete-btn').addEventListener('click', async () => {
-  // task 의 id만 추출
+$('.main__header-delete-btn').addEventListener('click', () => {
+  deleteAllTask();
+  return;
+});
+
+// 할 일 '전체 삭제' 함수
+const deleteAllTask = async () => {
   const taskId = tasks.map((task) => {
     return task.id;
   });
-
   for (let i = 0; i < tasks.length; i++) {
     await TaskApi.deleteTask(taskId[i]);
   }
-
   render();
-});
+};
 
 // 할 일 추가
 $('#todo-add-btn').addEventListener('click', (e) => {
