@@ -71,6 +71,16 @@ body {
       justify-content: space-around;
       align-items: center;
     }
+
+    &-select {
+      &-div--complete {
+        font-family: inherit;
+      }
+
+      &-div--order {
+        font-family: inherit;
+      }
+    }
   }
 
   &__input {
