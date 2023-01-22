@@ -8,6 +8,7 @@ const BASE_URL =
   'https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos';
 
 const TaskApi = {
+  // 전체 task 불러오기 api
   async getAllTask() {
     const res = await fetch(`${BASE_URL}`, {
       method: 'GET',
@@ -17,11 +18,18 @@ const TaskApi = {
         username: 'KDT4_LeeJaeHa',
       },
     });
-
-    return res.json();
+    const data = await res.json();
+    console.log(data);
+    return data;
   },
+  // id: task.id,
+  // order: '',
+  // done: task.done,
+  // createdAt: task.createdAt,
+  // updatedAt: task.updatedAt,
 
-  async addTask(inputValue) {
+  // task 추가 api
+  async createTask(name) {
     // const task = {
     //   id: new Date().getTime(),
     //   order: '',
@@ -40,16 +48,32 @@ const TaskApi = {
         username: 'KDT4_LeeJaeHa',
       },
       body: JSON.stringify({
-        // id: task.id,
-        // order: task[task.id],
-        title: inputValue,
-        // done: task.done,
-        // createdAt: task.createdAt,
-        // updatedAt: task.updatedAt,
+        title: name,
       }),
     });
-
     return await res.json();
+  },
+
+  // task 이름 업데이트 api
+  // https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos/:todoId
+  async editTaskName(todoId, name, done) {
+    try {
+      const res = await fetch(`${BASE_URL}/${todoId}`, {
+        method: 'PUT',
+        headers: {
+          'content-type': 'application/json',
+          apikey: 'FcKdtJs202301',
+          username: 'KDT4_LeeJaeHa',
+        },
+        body: JSON.stringify({
+          title: name,
+          done: done,
+        }),
+      });
+      return await res.json();
+    } catch (err) {
+      console.log(err);
+    }
   },
 };
 
@@ -89,27 +113,24 @@ const updateTaskCount = () => {
  * 3. 다시 렌더링한다(render 함수 사용)
  */
 // 할 일 이름 수정 함수
-const editTaskName = (e) => {
+const editTaskName = async (e) => {
   const taskId = e.target.closest('li').dataset.todoId;
-  const taskObj = tasks.find((task) => task.id === Number(taskId));
+  const taskObj = tasks.find((task) => task.id === taskId);
   console.log(taskObj.title);
-  // const title = tasks.map((task) => task === taskObj);
-  // const titleIndex = title.indexOf(true);
-  // console.log(taskId);
   const $editBtn = e.target.closest('li').querySelector('.edit-btn');
   const $taskTitle = e.target.closest('li').querySelector('.todo-title');
 
   if ($editBtn.innerText.trim() === '수정') {
     $taskTitle.setAttribute('contenteditable', 'true');
     $editBtn.innerText = '저장';
-  } else if ($editBtn.innerText.trim() === '저장') {
     $taskTitle.focus();
+  } else if ($editBtn.innerText.trim() === '저장') {
     const editedTaskTitle = $taskTitle.innerText;
     $taskTitle.setAttribute('contenteditable', 'false');
     $editBtn.innerText = '수정';
 
-    // tasks[titleIndex].name = editedTaskTitle;
     taskObj.title = editedTaskTitle;
+    await TaskApi.editTaskName(taskId, taskObj.title, taskObj.done);
     render();
   }
 };
@@ -129,7 +150,7 @@ $('.main__todo').addEventListener('click', (e) => {
 const completeTask = (e) => {
   const $doneBtn = e.target.closest('li').querySelector('.done-btn');
   const $taskId = e.target.closest('li').dataset.todoId;
-  let taskObj = tasks.find((task) => task.id === Number($taskId));
+  let taskObj = tasks.find((task) => task.id === $taskId);
 
   if ($doneBtn.textContent.trim() === '하는 중') {
     console.log($doneBtn.textContent.trim());
@@ -168,7 +189,6 @@ $('#todo-add-btn').addEventListener('click', (e) => {
   e.preventDefault();
 
   createTask();
-
   return;
 });
 
@@ -181,8 +201,7 @@ const createTask = async () => {
     return;
   }
 
-  // tasks = await TaskApi.addTask(inputValue);
-  await TaskApi.addTask(inputValue);
+  await TaskApi.createTask(inputValue);
   render();
   inputValue = '';
 };
