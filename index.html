@@ -43,14 +43,20 @@
           <h2 class="main__header-title">할 일 전체</h2>
 
           <div class="main__header-select-div">
-            <select class="main__header-select-div--complete btn">
+            <select
+              class="main__header-select-div--complete btn"
+              id="select-complete"
+            >
               <option id="select-total" selected>전체</option>
-              <option id="select-completed">완료</option>
-              <option id="select-doing">하는 중</option>
+              <option id="select-completed" value="completed">완료</option>
+              <option id="select-doing" value="doing">하는 중</option>
             </select>
-            <select class="main__header-select-div--order btn">
-              <option id="select-new" selected>최신 순</option>
-              <option id="select-old">오래된 순</option>
+            <select
+              class="main__header-select-div--order btn"
+              id="select-order"
+            >
+              <option id="select-new" value="recent" selected>최신 순</option>
+              <option id="select-old" value="old">오래된 순</option>
             </select>
           </div>
 
