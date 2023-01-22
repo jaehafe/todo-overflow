@@ -1,5 +1,6 @@
 import '../scss/style.scss';
 import moment from 'moment';
+import Sortable from 'sortablejs';
 const nowTime = moment().format('M/DD H:m:s');
 console.log(nowTime);
 
@@ -248,6 +249,15 @@ const createTask = async () => {
   inputValue = '';
 };
 
+// sortableJS
+let drag = $('.main__todo');
+new Sortable(drag, {
+  animation: 150,
+});
+
+const slicedDate = (date) => {
+  return date.slice(5, 10);
+};
 const render = async () => {
   tasks = await TaskApi.getAllTask();
   const template = tasks
@@ -258,7 +268,9 @@ const render = async () => {
       }">
       <div class="main__todo-list--title-container">
         <span class="main__todo-list--date">${
-          task.updatedAt ? task.updatedAt : task.createdAt
+          slicedDate(task.updatedAt)
+            ? slicedDate(task.updatedAt)
+            : slicedDate(task.createdAt)
         }</span>
         <span
           contenteditable="false"
