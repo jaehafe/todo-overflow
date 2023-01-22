@@ -54,9 +54,9 @@ const TaskApi = {
     return await res.json();
   },
 
-  // task 이름 업데이트 api
+  // tas(이름, 완료) 업데이트 api
   // https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos/:todoId
-  async editTaskName(todoId, name, done) {
+  async updateTask(todoId, name, done) {
     try {
       const res = await fetch(`${BASE_URL}/${todoId}`, {
         method: 'PUT',
@@ -113,9 +113,9 @@ const updateTaskCount = () => {
  * 3. 다시 렌더링한다(render 함수 사용)
  */
 // 할 일 이름 수정 함수
-const editTaskName = async (e) => {
-  const taskId = e.target.closest('li').dataset.todoId;
-  const taskObj = tasks.find((task) => task.id === taskId);
+const updateTask = async (e) => {
+  const $taskId = e.target.closest('li').dataset.todoId;
+  const taskObj = tasks.find((task) => task.id === $taskId);
   console.log(taskObj.title);
   const $editBtn = e.target.closest('li').querySelector('.edit-btn');
   const $taskTitle = e.target.closest('li').querySelector('.todo-title');
@@ -130,14 +130,14 @@ const editTaskName = async (e) => {
     $editBtn.innerText = '수정';
 
     taskObj.title = editedTaskTitle;
-    await TaskApi.editTaskName(taskId, taskObj.title, taskObj.done);
+    await TaskApi.updateTask($taskId, taskObj.title, taskObj.done);
     render();
   }
 };
 // 할 일 이름 수정
 $('.main__todo').addEventListener('click', (e) => {
   if (e.target.classList.contains('edit-btn')) {
-    editTaskName(e);
+    updateTask(e);
     return;
   }
 });
@@ -147,7 +147,7 @@ $('.main__todo').addEventListener('click', (e) => {
  * 2.
  */
 // 할 일 완료 함수
-const completeTask = (e) => {
+const completeTask = async (e) => {
   const $doneBtn = e.target.closest('li').querySelector('.done-btn');
   const $taskId = e.target.closest('li').dataset.todoId;
   let taskObj = tasks.find((task) => task.id === $taskId);
@@ -159,6 +159,7 @@ const completeTask = (e) => {
     // $doneBtn.textContent = '하는 중';
   }
   taskObj.done = !taskObj.done;
+  await TaskApi.updateTask($taskId, taskObj.title, taskObj.done);
   render();
 };
 // 할 일 완료
