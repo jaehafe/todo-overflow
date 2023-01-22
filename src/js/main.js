@@ -54,7 +54,7 @@ const TaskApi = {
     return await res.json();
   },
 
-  // tas(이름, 완료) 업데이트 api
+  // task(이름, 완료) 업데이트 api
   // https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos/:todoId
   async updateTask(todoId, name, done) {
     try {
@@ -69,6 +69,24 @@ const TaskApi = {
           title: name,
           done: done,
         }),
+      });
+      return await res.json();
+    } catch (err) {
+      console.log(err);
+    }
+  },
+
+  // task 삭제 api
+  // https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos/:todoId
+  async deleteTask(todoId) {
+    try {
+      const res = await fetch(`${BASE_URL}/${todoId}`, {
+        method: 'DELETE',
+        headers: {
+          'content-type': 'application/json',
+          apikey: 'FcKdtJs202301',
+          username: 'KDT4_LeeJaeHa',
+        },
       });
       return await res.json();
     } catch (err) {
@@ -173,15 +191,16 @@ $('.main__todo').addEventListener('click', (e) => {
 // 할 일 삭제
 $('.main__todo').addEventListener('click', (e) => {
   if (e.target.classList.contains('delete-btn')) {
-    let taskId = e.target.closest('li').dataset.todoId;
-    deleteTask(taskId);
+    deleteTask(e);
   }
   return;
 });
 // 할 일 삭제 함수
-const deleteTask = (taskId) => {
-  const filtered = tasks.filter((task) => Number(taskId) !== task.id);
-  tasks = filtered;
+const deleteTask = async (e) => {
+  const $taskId = e.target.closest('li').dataset.todoId;
+  const filtered = tasks.filter((task) => task.id !== $taskId);
+  // tasks = filtered;
+  await TaskApi.deleteTask($taskId);
   render();
 };
 
