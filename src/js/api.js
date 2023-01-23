@@ -1,10 +1,9 @@
-const BASE_URL =
-  'https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos';
+const BASE_URL = `${import.meta.env.VITE_BASE_URL}`;
 
 const HEADERS = {
   'content-type': 'application/json',
-  apikey: 'FcKdtJs202301',
-  username: 'KDT4_LeeJaeHa',
+  apikey: `${import.meta.env.VITE_API_KEY}`,
+  username: `${import.meta.env.VITE_USERNAME}`,
 };
 
 const HTTP_METHOD = {
