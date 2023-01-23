@@ -1,108 +1,18 @@
 import '../scss/style.scss';
 import Sortable from 'sortablejs';
+import TaskApi from './api.js';
 
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => document.querySelectorAll(selector);
-const BASE_URL =
-  'https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos';
+
 let taskOrder = 0;
-
-const TaskApi = {
-  /** 전체 task 불러오기 api */
-  async getAllTask() {
-    const res = await fetch(`${BASE_URL}`, {
-      method: 'GET',
-      headers: {
-        'content-type': 'application/json',
-        apikey: 'FcKdtJs202301',
-        username: 'KDT4_LeeJaeHa',
-      },
-    });
-    const data = await res.json();
-    console.log(data);
-    return data;
-  },
-
-  /** task 추가 api */
-  async createTask(title, order) {
-    // POST api 요청
-    const res = await fetch(`${BASE_URL}`, {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        apikey: 'FcKdtJs202301',
-        username: 'KDT4_LeeJaeHa',
-      },
-      body: JSON.stringify({
-        title,
-        order,
-      }),
-    });
-    return await res.json();
-  },
-
-  /** task(이름, 완료) 업데이트 api */
-  async updateTask(taskId, title, done) {
-    try {
-      const res = await fetch(`${BASE_URL}/${taskId}`, {
-        method: 'PUT',
-        headers: {
-          'content-type': 'application/json',
-          apikey: 'FcKdtJs202301',
-          username: 'KDT4_LeeJaeHa',
-        },
-        body: JSON.stringify({
-          title,
-          done,
-        }),
-      });
-      return await res.json();
-    } catch (err) {
-      console.log(err);
-    }
-  },
-
-  /** task(reorder) 업데이트 api */
-  async reorderTask(taskIds) {
-    try {
-      const res = await fetch(`${BASE_URL}/reorder`, {
-        method: 'PUT',
-        headers: {
-          'content-type': 'application/json',
-          apikey: 'FcKdtJs202301',
-          username: 'KDT4_LeeJaeHa',
-        },
-        body: JSON.stringify(taskIds),
-      });
-      return await res.json();
-    } catch (err) {
-      console.log(err);
-    }
-  },
-
-  /** task 삭제 api */
-  async deleteTask(taskId) {
-    try {
-      const res = await fetch(`${BASE_URL}/${taskId}`, {
-        method: 'DELETE',
-        headers: {
-          'content-type': 'application/json',
-          apikey: 'FcKdtJs202301',
-          username: 'KDT4_LeeJaeHa',
-        },
-      });
-      return res;
-    } catch (err) {
-      console.log(err);
-    }
-  },
-};
 
 let tasks = [];
 
-const render = async (tasks) => {
-  tasks = await TaskApi.getAllTask();
-  const template = tasks
+const render = async (taskList) => {
+  // taskList = tasks;
+  taskList = await TaskApi.getAllTask();
+  const template = taskList
     .map((task) => {
       return `
     <li class="main__todo-list ${task.done ? 'complete' : ''}" data-todo-id="${
@@ -125,7 +35,52 @@ const render = async (tasks) => {
       </div>
       <div class="main__todo-list--btn-container">
         <button class="main__todo-list--done-btn btn done-btn">
-        ${task.done ? '완료' : '하는 중'}
+          ${task.done ? '완료' : '하는 중'}
+        </button>
+        <button class="main__todo-list--edit-btn btn edit-btn">
+          수정
+        </button>
+        <button class="main__todo-list--delete-btn btn delete-btn">
+          삭제
+        </button>
+      </div>
+    </li>
+    `;
+    })
+    .join('');
+
+  $('.main__todo').innerHTML = template;
+  $('.main__input-text').value = '';
+  updateTaskCount();
+};
+
+const renderByType = (taskList) => {
+  // taskList = tasks;
+  // taskList = await TaskApi.getAllTask();
+  const template = taskList
+    .map((task) => {
+      return `
+    <li class="main__todo-list ${task.done ? 'complete' : ''}" data-todo-id="${
+        task.id
+      }" data-todo-order="${task.order}">
+      <div class="main__todo-list--title-container">
+        <div>
+          <span class="main__todo-list--date createdAt">생성: ${formattedDate(
+            task.createdAt
+          )}</span>
+          <span class="main__todo-list--date updatedAt">수정: ${formattedDate(
+            task.updatedAt
+          )}</span>
+        </div>
+        <span
+          contenteditable="false"
+          class="main__todo-list--title todo-title"
+          >${task.title}</span
+        >
+      </div>
+      <div class="main__todo-list--btn-container">
+        <button class="main__todo-list--done-btn btn done-btn">
+          ${task.done ? '완료' : '하는 중'}
         </button>
         <button class="main__todo-list--edit-btn btn edit-btn">
           수정
@@ -145,13 +100,13 @@ const render = async (tasks) => {
 };
 
 const init = async () => {
-  tasks = await TaskApi.getAllTask();
+  // tasks = await TaskApi.getAllTask();
 
   $('.main__input-text').focus();
   // if (task.done) {
   //   $('.main__todo-list').classList.add('complete');
   // }
-  render();
+  render(tasks);
 };
 
 /** 할 일 개수 업데이트 함수 */
@@ -248,7 +203,7 @@ const deleteTask = async (e) => {
   // const filtered = tasks.filter((task) => task.id !== $taskId);
   await TaskApi.deleteTask($taskId);
   // await reorderTask();
-  render();
+  render(tasks);
 };
 
 /**
@@ -270,7 +225,7 @@ const deleteAllTask = async () => {
   for (let i = 0; i < tasks.length; i++) {
     await TaskApi.deleteTask(taskId[i]);
   }
-  render();
+  render(tasks);
 };
 
 // 할 일 추가
@@ -291,7 +246,8 @@ const createTask = async () => {
   }
 
   await TaskApi.createTask(inputValue, taskOrder);
-  render();
+  renderTasksBySelect();
+  render(tasks);
 
   inputValue = '';
 };
@@ -309,7 +265,7 @@ const reorderTask = async () => {
 
 // sortableJS
 new Sortable($('.main__todo'), {
-  animation: 150,
+  animation: 250,
 });
 
 /** createdAt, updatedAt 조작 */
@@ -324,30 +280,32 @@ const formattedDate = (taskDate) => {
 
 /** 완료, 순서에 값에 따라 render */
 const renderTasksBySelect = async (done, order) => {
-  console.log('tasks', tasks);
   // 완료
   if (done === 'completed') {
     const completedTask = tasks.filter((task) => task.done === true);
     console.log('completedTask', completedTask);
-    return render(completedTask);
+    renderByType(completedTask);
   } else if (done === 'doing') {
     const doingTask = tasks.filter((task) => task.done === false);
-    return render(doingTask);
+    renderByType(doingTask);
   }
   // 순서
   if (order === 'recent') {
-    return tasks.sort(
+    const recent = tasks.sort(
       (a, b) => +new Date(b.createdAt) - +new Date(a.createdAt)
     );
+    // renderByType(recent);
   } else if (order === 'old') {
-    return tasks.sort(
+    const old = tasks.sort(
       (a, b) => +new Date(a.createdAt) - +new Date(b.createdAt)
     );
+    // renderByType(old);
   }
+  renderByType(recent);
 };
 
 /** 완료 select 이벤트 */
-$('#select-complete').addEventListener('change', async () => {
+$('#select-complete').addEventListener('change', () => {
   console.log($('#select-complete').value);
   console.log(
     renderTasksBySelect($('#select-complete').value, $('#select-order').value)
@@ -356,7 +314,7 @@ $('#select-complete').addEventListener('change', async () => {
 });
 
 /** 최신 순 select 이벤트 */
-$('#select-order').addEventListener('change', async () => {
+$('#select-order').addEventListener('change', () => {
   console.log(
     renderTasksBySelect($('#select-complete').value, $('#select-order').value)
   );

@@ -1,15 +1,92 @@
-// end point
-// 목록 조회 GET
-// https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos
+const BASE_URL =
+  'https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos';
 
-// 목록 순서변경 PUT
-// https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos/reorder
+const HEADERS = {
+  'content-type': 'application/json',
+  apikey: 'FcKdtJs202301',
+  username: 'KDT4_LeeJaeHa',
+};
 
-// task 추가 POST
-// https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos
+const HTTP_METHOD = {
+  GET() {
+    return {
+      method: 'GET',
+      headers: HEADERS,
+    };
+  },
+  POST(title, order) {
+    return {
+      method: 'POST',
+      headers: HEADERS,
+      body: JSON.stringify({ title, order }),
+    };
+  },
+  UpdatePUT(title, done) {
+    return {
+      method: 'PUT',
+      headers: HEADERS,
+      body: JSON.stringify({ title, done }),
+    };
+  },
+  ReorderPUT(taskIds) {
+    return {
+      method: 'PUT',
+      headers: HEADERS,
+      body: JSON.stringify({ taskIds }),
+    };
+  },
+  DELETE() {
+    return {
+      method: 'DELETE',
+      headers: HEADERS,
+    };
+  },
+};
 
-// task 수정 PUT
-// https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos/:todoId
+const request = async (url, option) => {
+  try {
+    const res = await fetch(url, option);
+    return await res.json();
+  } catch (err) {
+    console.log(err);
+  }
+};
 
-// task 삭제 DELETE
-// https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos/:todoId
+// data 없이 response를 내려주는 형태(DELETE method)
+const requestWithoutJson = async (url, option) => {
+  try {
+    const res = await fetch(url, option);
+    return res;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const TaskApi = {
+  /** 전체 task 불러오기 api */
+  async getAllTask() {
+    return request(`${BASE_URL}`, HTTP_METHOD.GET());
+  },
+
+  /** task 추가 api */
+  async createTask(title, order) {
+    return request(`${BASE_URL}`, HTTP_METHOD.POST(title, order));
+  },
+
+  /** task(이름, 완료) 업데이트 api */
+  async updateTask(taskId, title, done) {
+    return request(`${BASE_URL}/${taskId}`, HTTP_METHOD.UpdatePUT(title, done));
+  },
+
+  /** task(reorder) 업데이트 api */
+  async reorderTask(taskIds) {
+    return request(`${BASE_URL}/reorder`, HTTP_METHOD.ReorderPUT(taskIds));
+  },
+
+  /** task 삭제 api */
+  async deleteTask(taskId) {
+    return requestWithoutJson(`${BASE_URL}/${taskId}`, HTTP_METHOD.DELETE());
+  },
+};
+
+export default TaskApi;
