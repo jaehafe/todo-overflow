@@ -100,7 +100,7 @@ const TaskApi = {
 
 let tasks = [];
 
-const render = async () => {
+const render = async (tasks) => {
   tasks = await TaskApi.getAllTask();
   const template = tasks
     .map((task) => {
@@ -155,9 +155,8 @@ const init = async () => {
 };
 
 /** 할 일 개수 업데이트 함수 */
-const updateTaskCount = () => {
-  // const taskCount = $('.main__todo').querySelectorAll('li').length;
-  // $('.todo-total-count').innerHTML = `총 ${taskCount}개`;
+const updateTaskCount = async () => {
+  tasks = await TaskApi.getAllTask();
   const completedTaskArray = tasks.filter((task) => task.done === true);
   $('.todo-total-count').textContent = `할 일 전체 ${tasks.length}개`;
   $('.completed-task').textContent = `완료 ${completedTaskArray.length}개`;
@@ -196,7 +195,7 @@ const updateTask = async (e) => {
 
     taskObj.title = editedTaskTitle;
     await TaskApi.updateTask($taskId, taskObj.title, taskObj.done);
-    render();
+    render(tasks);
   }
 };
 /** 할 일 이름 수정 이벤트 */
@@ -224,8 +223,8 @@ const completeTask = async (e) => {
     // $doneBtn.textContent = '하는 중';
   }
   taskObj.done = !taskObj.done;
-  await TaskApi.updateTask($taskId, taskObj.title, taskObj.done);
-  render();
+  tasks = await TaskApi.updateTask($taskId, taskObj.title, taskObj.done);
+  render(tasks);
 };
 
 /** 할 일 완료 이벤트 */
@@ -324,26 +323,45 @@ const formattedDate = (taskDate) => {
 };
 
 /** 완료, 순서에 값에 따라 render */
-// const renderTasks = async (done, order) => {
-//   // 순서
-//   if (order === $('#select-new')) {
-//     return tasks.sort(
-//       (a, b) => +new Date(b.createdAt) - +new Date(a.createdAt)
-//     );
-//   } else if (order === $('#select-old')) {
-//     return tasks.sort(
-//       (a, b) => +new Date(a.createdAt) - +new Date(b.createdAt)
-//     );
-//   }
-//   // 완료
-//   if (done === $('#select-completed')) {
-//     return (tasks = tasks.filter((task) => task.done === true));
-//   } else if (done === $('#select-doing')) {
-//     return (tasks = tasks.filter((task) => task.done === false));
-//   }
-// };
+const renderTasksBySelect = async (done, order) => {
+  console.log('tasks', tasks);
+  // 완료
+  if (done === 'completed') {
+    const completedTask = tasks.filter((task) => task.done === true);
+    console.log('completedTask', completedTask);
+    return render(completedTask);
+  } else if (done === 'doing') {
+    const doingTask = tasks.filter((task) => task.done === false);
+    return render(doingTask);
+  }
+  // 순서
+  if (order === 'recent') {
+    return tasks.sort(
+      (a, b) => +new Date(b.createdAt) - +new Date(a.createdAt)
+    );
+  } else if (order === 'old') {
+    return tasks.sort(
+      (a, b) => +new Date(a.createdAt) - +new Date(b.createdAt)
+    );
+  }
+};
 
-// console.log(renderTasks($('#select-completed'), $('#select-new')));
+/** 완료 select 이벤트 */
+$('#select-complete').addEventListener('change', async () => {
+  console.log($('#select-complete').value);
+  console.log(
+    renderTasksBySelect($('#select-complete').value, $('#select-order').value)
+  );
+  renderTasksBySelect($('#select-complete').value, $('#select-order').value);
+});
+
+/** 최신 순 select 이벤트 */
+$('#select-order').addEventListener('change', async () => {
+  console.log(
+    renderTasksBySelect($('#select-complete').value, $('#select-order').value)
+  );
+  renderTasksBySelect($('#select-complete').value, $('#select-order').value);
+});
 
 // 최초 화면 로드 시 렌더링
 window.addEventListener('DOMContentLoaded', init);
