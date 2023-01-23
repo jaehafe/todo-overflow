@@ -1,3 +1,5 @@
+import { handleLoading, handleButtons } from './handleLoading';
+
 const BASE_URL = `${import.meta.env.VITE_BASE_URL}`;
 
 const HEADERS = {
@@ -43,21 +45,29 @@ const HTTP_METHOD = {
 };
 
 const request = async (url, option) => {
+  handleLoading.showLoading();
+  handleButtons.disabledTrue();
   try {
     const res = await fetch(url, option);
     return await res.json();
   } catch (err) {
     console.log(err);
+  } finally {
+    handleLoading.hideLoading();
+    handleButtons.disabledFalse();
   }
 };
 
 // data 없이 response를 내려주는 형태(DELETE method)
 const requestWithoutJson = async (url, option) => {
+  handleLoading.showLoading();
   try {
     const res = await fetch(url, option);
     return res;
   } catch (err) {
     console.log(err);
+  } finally {
+    handleLoading.hideLoading();
   }
 };
 

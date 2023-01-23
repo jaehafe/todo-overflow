@@ -1,9 +1,7 @@
 import '../scss/style.scss';
+import { $, $$ } from './dom.js';
 import Sortable from 'sortablejs';
 import TaskApi from './api.js';
-
-const $ = (selector) => document.querySelector(selector);
-const $$ = (selector) => document.querySelectorAll(selector);
 
 let taskOrder = 0;
 
@@ -294,14 +292,13 @@ const renderTasksBySelect = async (done, order) => {
     const recent = tasks.sort(
       (a, b) => +new Date(b.createdAt) - +new Date(a.createdAt)
     );
-    // renderByType(recent);
+    renderByType(recent);
   } else if (order === 'old') {
     const old = tasks.sort(
       (a, b) => +new Date(a.createdAt) - +new Date(b.createdAt)
     );
-    // renderByType(old);
+    renderByType(old);
   }
-  renderByType(recent);
 };
 
 /** 완료 select 이벤트 */
