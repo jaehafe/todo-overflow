@@ -17,6 +17,7 @@
   "author": "Jaeha Lee <wogkdkrm112@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "moment": "^2.29.4"
+    "moment": "^2.29.4",
+    "sortablejs": "^1.15.0"
   }
 }
