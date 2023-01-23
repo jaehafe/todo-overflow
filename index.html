@@ -69,19 +69,31 @@
           </button>
         </form>
         <ul class="main__todo">
-          <!-- <li class="main__todo-list" data-todo-id="">
+          <!-- <li
+            class="main__todo-list ${task.done ? 'complete' : ''}"
+            data-todo-id="${
+            task.id
+          }"
+            data-todo-order="${task.order}"
+          >
             <div class="main__todo-list--title-container">
-              <span class="main__todo-list--date">12-15</span>
+              <div>
+                <span class="main__todo-list--date createdAt"
+                  >생성: ${formattedDate( task.createdAt )}</span
+                >
+                <span class="main__todo-list--date updatedAt"
+                  >수정: ${formattedDate( task.updatedAt )}</span
+                >
+              </div>
               <span
-                type="text"
                 contenteditable="false"
                 class="main__todo-list--title todo-title"
-                >123</span
+                >${task.title}</span
               >
             </div>
             <div class="main__todo-list--btn-container">
               <button class="main__todo-list--done-btn btn done-btn">
-                완료
+                ${task.done ? '완료' : '하는 중'}
               </button>
               <button class="main__todo-list--edit-btn btn edit-btn">
                 수정
@@ -91,29 +103,7 @@
               </button>
             </div>
           </li> -->
-          <!--  -->
-          <!-- <li class="main__todo-list" data-todo-id="">
-            <div class="main__todo-list--title-container">
-              <span class="main__todo-list--date">12-15</span>
-              <span
-                type="text"
-                contenteditable="true"
-                class="main__todo-list--title todo-title"
-                >123</span
-              >
-            </div>
-            <div class="main__todo-list--btn-container">
-              <button class="main__todo-list--done-btn btn done-btn">
-                완료
-              </button>
-              <button class="main__todo-list--edit-btn btn edit-btn">
-                수정
-              </button>
-              <button class="main__todo-list--delete-btn btn delete-btn">
-                삭제
-              </button>
-            </div>
-          </li> -->
+          <li class="main__todo-list skeleton"></li>
         </ul>
       </div>
     </main>
