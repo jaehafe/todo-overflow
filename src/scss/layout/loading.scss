@@ -13,6 +13,7 @@ $timingFunction: ease;
   // height: 100px;
   // width: 86px;
   transform: scale(#{$scale * 0.5});
+  z-index: 100;
 
   &.show {
     display: block;
