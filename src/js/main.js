@@ -320,8 +320,3 @@ $('#select-order').addEventListener('change', () => {
 
 // 최초 화면 로드 시 렌더링
 window.addEventListener('DOMContentLoaded', init);
-
-/** 초기 화면 skeleton UI */
-for (let i = 0; i < 10; i++) {
-  $('.main__todo').append($('.skeleton').cloneNode(true));
-}

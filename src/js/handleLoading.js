@@ -174,7 +174,7 @@ const loadingTemplate = `
 
 export const handleLoading = {
   showLoading: () => {
-    // $('.main').append(loadingTemplate);
+    $('.main').insertAdjacentHTML('afterbegin', loadingTemplate);
     $('.container').classList.add('show');
   },
   hideLoading: () => {
@@ -190,3 +190,8 @@ export const handleButtons = {
     $('#todo-add-btn').removeAttribute('disabled');
   },
 };
+
+/** 초기 화면 skeleton UI */
+for (let i = 0; i < 10; i++) {
+  $('.main__todo').append($('.skeleton').cloneNode(true));
+}
