@@ -326,19 +326,19 @@ const renderTasksBySelect = async (done, order) => {
     renderByType(doingTask);
   }
   // 순서
-  if (order === 'recent') {
-    const recent = tasks.sort(
-      (a, b) => +new Date(b.createdAt) - +new Date(a.createdAt)
-    );
-    console.log('recent', recent);
-    renderByType(recent);
-  } else if (order === 'old') {
-    const old = tasks.sort(
-      (a, b) => +new Date(a.createdAt) - +new Date(b.createdAt)
-    );
-    console.log('old', old);
-    renderByType(old);
-  }
+  // if (order === 'recent') {
+  //   const recent = tasks.sort(
+  //     (a, b) => +new Date(b.createdAt) - +new Date(a.createdAt)
+  //   );
+  //   console.log('recent', recent);
+  //   renderByType(recent);
+  // } else if (order === 'old') {
+  //   const old = tasks.sort(
+  //     (a, b) => +new Date(a.createdAt) - +new Date(b.createdAt)
+  //   );
+  //   console.log('old', old);
+  //   renderByType(old);
+  // }
 };
 
 // /** 완료 select 이벤트 */
