@@ -57,10 +57,12 @@ src/*
 - [ ] `let tasks = []` `render` 함수 사용으로 할 일 상태관리
 - [ ] 총 메뉴 갯수 count 함수(updateTaskCount)사용, ‘할 일 전체’, ‘완료’, ‘하는 중’ 각각의 count를 브라우저 최상단에 display
 - [ ] 완료한 task만 삭제할 수 있는 버튼
+- [ ] sortableJS을 사용한 drag n drop
 
-## Issues
+## Tasks & Issues
 
 - [ ] 완료/하는중 정렬 && 시간 순 정렬 동시 선택 시 오류 발생
+- [ ] drag n drop 사용 시 `reorder` api로 재정렬
 
 ## Running Locally
 
