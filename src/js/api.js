@@ -61,6 +61,7 @@ const request = async (url, option) => {
 // data 없이 response를 내려주는 형태(DELETE method)
 const requestWithoutJson = async (url, option) => {
   handleLoading.showLoading();
+  handleButtons.disabledTrue();
   try {
     const res = await fetch(url, option);
     return res;
@@ -68,6 +69,7 @@ const requestWithoutJson = async (url, option) => {
     console.log(err);
   } finally {
     handleLoading.hideLoading();
+    handleButtons.disabledFalse();
   }
 };
 

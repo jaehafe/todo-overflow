@@ -210,12 +210,12 @@ const deleteTask = async (e) => {
  * 3. ul 태그 안에 있는 li 길이만큼 순회하면서 삭제
  */
 /** 할 일 '전체 삭제' */
-$('.main__header-delete-btn').addEventListener('click', async () => {
+$('#delete-all').addEventListener('click', async () => {
   deleteAllTask();
   return;
 });
 
-// 할 일 '전체 삭제' 함수
+/** 할 일 '전체 삭제' 함수 */
 const deleteAllTask = async () => {
   const taskId = tasks.map((task) => {
     return task.id;
@@ -226,7 +226,27 @@ const deleteAllTask = async () => {
   render(tasks);
 };
 
-// 할 일 추가
+/** 완료한 task 삭제 이벤트 */
+$('#delete-completed').addEventListener('click', () => {
+  deleteCompleted();
+});
+
+/** 완료한 task 삭제 함수 */
+const deleteCompleted = async () => {
+  const taskIds = [];
+  tasks.map((task) => {
+    if (task.done === true) {
+      taskIds.push(task.id);
+    }
+  });
+  for (let i = 0; i < taskIds.length; i++) {
+    await TaskApi.deleteTask(taskIds[i]);
+  }
+
+  render(tasks);
+};
+
+/** 할 일 추가 */
 $('#todo-add-btn').addEventListener('click', async (e) => {
   e.preventDefault();
 
@@ -234,7 +254,7 @@ $('#todo-add-btn').addEventListener('click', async (e) => {
   return;
 });
 
-// 할 일 추가 함수
+/** 할 일 추가 함수 */
 const createTask = async () => {
   let inputValue = $('.main__input-text').value;
 
@@ -244,7 +264,6 @@ const createTask = async () => {
   }
 
   await TaskApi.createTask(inputValue, taskOrder);
-  renderTasksBySelect();
   render(tasks);
 
   inputValue = '';
@@ -276,10 +295,29 @@ const formattedDate = (taskDate) => {
   return `${month}/${today} ${hour}:${min}`;
 };
 
-/** 완료, 순서에 값에 따라 render */
+// const renderTasksBySelect = () => {
+//   $('#select-complete').addEventListener('change', () => {
+//     let $selected = [...$('#select-complete').options]
+//       .filter((option) => option.selected)
+//       .map((option) => option.value);
+//     console.log($selected);
+//   });
+
+//   $('#select-order').addEventListener('change', () => {
+//     let $selected = [...$('#select-order').options]
+//       .filter((option) => option.selected)
+//       .map((option) => option.value);
+//     console.log($selected);
+//   });
+// };
+// renderTasksBySelect();
+
+// /** 완료, 순서에 값에 따라 render */
 const renderTasksBySelect = async (done, order) => {
   // 완료
-  if (done === 'completed') {
+  if (done === 'all') {
+    render();
+  } else if (done === 'completed') {
     const completedTask = tasks.filter((task) => task.done === true);
     console.log('completedTask', completedTask);
     renderByType(completedTask);
@@ -292,16 +330,18 @@ const renderTasksBySelect = async (done, order) => {
     const recent = tasks.sort(
       (a, b) => +new Date(b.createdAt) - +new Date(a.createdAt)
     );
+    console.log('recent', recent);
     renderByType(recent);
   } else if (order === 'old') {
     const old = tasks.sort(
       (a, b) => +new Date(a.createdAt) - +new Date(b.createdAt)
     );
+    console.log('old', old);
     renderByType(old);
   }
 };
 
-/** 완료 select 이벤트 */
+// /** 완료 select 이벤트 */
 $('#select-complete').addEventListener('change', () => {
   console.log($('#select-complete').value);
   console.log(
@@ -310,7 +350,7 @@ $('#select-complete').addEventListener('change', () => {
   renderTasksBySelect($('#select-complete').value, $('#select-order').value);
 });
 
-/** 최신 순 select 이벤트 */
+// /** 최신 순 select 이벤트 */
 $('#select-order').addEventListener('change', () => {
   console.log(
     renderTasksBySelect($('#select-complete').value, $('#select-order').value)

@@ -174,7 +174,7 @@ const loadingTemplate = `
 
 export const handleLoading = {
   showLoading: () => {
-    $('.main').insertAdjacentHTML('afterbegin', loadingTemplate);
+    $('.cube-loading').innerHTML = loadingTemplate;
     $('.container').classList.add('show');
   },
   hideLoading: () => {

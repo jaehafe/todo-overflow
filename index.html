@@ -47,7 +47,7 @@
               class="main__header-select-div--complete btn"
               id="select-complete"
             >
-              <option id="select-total" value="">전체</option>
+              <option id="select-total" value="all">전체</option>
               <option id="select-completed" value="completed">완료</option>
               <option id="select-doing" value="doing">하는 중</option>
             </select>
@@ -55,12 +55,19 @@
               class="main__header-select-div--order btn"
               id="select-order"
             >
-              <option id="select-all" value="">시간 정렬</option>
+              <option id="select-all" value="custom">시간 정렬</option>
               <option id="select-new" value="recent">최신 순</option>
               <option id="select-old" value="old">오래된 순</option>
             </select>
           </div>
-          <button class="main__header-delete-btn btn">전체 삭제</button>
+          <div class="main__header-delete">
+            <button class="main__header-delete-btn btn" id="delete-completed">
+              완료만 삭제
+            </button>
+            <button class="main__header-delete-btn btn" id="delete-all">
+              전체 삭제
+            </button>
+          </div>
         </div>
         <form class="main__input-container">
           <input placeholder="할 일을 입력하세요" class="main__input-text" />
@@ -108,175 +115,6 @@
       </div>
     </main>
     <!-- cube loading -->
-    <!-- <div class="container">
-      <div class="h1Container">
-        <div class="cube h1 w1 l1">
-          <div class="face top"></div>
-          <div class="face left"></div>
-          <div class="face right"></div>
-        </div>
-
-        <div class="cube h1 w1 l2">
-          <div class="face top"></div>
-          <div class="face left"></div>
-          <div class="face right"></div>
-        </div>
-
-        <div class="cube h1 w1 l3">
-          <div class="face top"></div>
-          <div class="face left"></div>
-          <div class="face right"></div>
-        </div>
-
-        <div class="cube h1 w2 l1">
-          <div class="face top"></div>
-          <div class="face left"></div>
-          <div class="face right"></div>
-        </div>
-
-        <div class="cube h1 w2 l2">
-          <div class="face top"></div>
-          <div class="face left"></div>
-          <div class="face right"></div>
-        </div>
-
-        <div class="cube h1 w2 l3">
-          <div class="face top"></div>
-          <div class="face left"></div>
-          <div class="face right"></div>
-        </div>
-
-        <div class="cube h1 w3 l1">
-          <div class="face top"></div>
-          <div class="face left"></div>
-          <div class="face right"></div>
-        </div>
-
-        <div class="cube h1 w3 l2">
-          <div class="face top"></div>
-          <div class="face left"></div>
-          <div class="face right"></div>
-        </div>
-
-        <div class="cube h1 w3 l3">
-          <div class="face top"></div>
-          <div class="face left"></div>
-          <div class="face right"></div>
-        </div>
-      </div>
-
-      <div class="h2Container">
-        <div class="cube h2 w1 l1">
-          <div class="face top"></div>
-          <div class="face left"></div>
-          <div class="face right"></div>
-        </div>
-
-        <div class="cube h2 w1 l2">
-          <div class="face top"></div>
-          <div class="face left"></div>
-          <div class="face right"></div>
-        </div>
-
-        <div class="cube h2 w1 l3">
-          <div class="face top"></div>
-          <div class="face left"></div>
-          <div class="face right"></div>
-        </div>
-
-        <div class="cube h2 w2 l1">
-          <div class="face top"></div>
-          <div class="face left"></div>
-          <div class="face right"></div>
-        </div>
-
-        <div class="cube h2 w2 l2">
-          <div class="face top"></div>
-          <div class="face left"></div>
-          <div class="face right"></div>
-        </div>
-
-        <div class="cube h2 w2 l3">
-          <div class="face top"></div>
-          <div class="face left"></div>
-          <div class="face right"></div>
-        </div>
-
-        <div class="cube h2 w3 l1">
-          <div class="face top"></div>
-          <div class="face left"></div>
-          <div class="face right"></div>
-        </div>
-
-        <div class="cube h2 w3 l2">
-          <div class="face top"></div>
-          <div class="face left"></div>
-          <div class="face right"></div>
-        </div>
-
-        <div class="cube h2 w3 l3">
-          <div class="face top"></div>
-          <div class="face left"></div>
-          <div class="face right"></div>
-        </div>
-      </div>
-
-      <div class="h3Container">
-        <div class="cube h3 w1 l1">
-          <div class="face top"></div>
-          <div class="face left"></div>
-          <div class="face right"></div>
-        </div>
-
-        <div class="cube h3 w1 l2">
-          <div class="face top"></div>
-          <div class="face left"></div>
-          <div class="face right"></div>
-        </div>
-
-        <div class="cube h3 w1 l3">
-          <div class="face top"></div>
-          <div class="face left"></div>
-          <div class="face right"></div>
-        </div>
-
-        <div class="cube h3 w2 l1">
-          <div class="face top"></div>
-          <div class="face left"></div>
-          <div class="face right"></div>
-        </div>
-
-        <div class="cube h3 w2 l2">
-          <div class="face top"></div>
-          <div class="face left"></div>
-          <div class="face right"></div>
-        </div>
-
-        <div class="cube h3 w2 l3">
-          <div class="face top"></div>
-          <div class="face left"></div>
-          <div class="face right"></div>
-        </div>
-
-        <div class="cube h3 w3 l1">
-          <div class="face top"></div>
-          <div class="face left"></div>
-          <div class="face right"></div>
-        </div>
-
-        <div class="cube h3 w3 l2">
-          <div class="face top"></div>
-          <div class="face left"></div>
-          <div class="face right"></div>
-        </div>
-
-        <div class="cube h3 w3 l3">
-          <div class="face top"></div>
-          <div class="face left"></div>
-          <div class="face right"></div>
-        </div>
-      </div>
-    </div> -->
-    <!--  -->
+    <div class="cube-loading"></div>
   </body>
 </html>
