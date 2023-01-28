@@ -1,4 +1,4 @@
-import { $, $$ } from './dom.js';
+import { $ } from './dom.js';
 
 const loadingTemplate = `
 <div class="container">
@@ -184,10 +184,10 @@ export const handleLoading = {
 
 export const handleButtons = {
   disabledTrue: () => {
-    $('#todo-add-btn').setAttribute('disabled', true);
+    $<HTMLButtonElement>('#todo-add-btn').setAttribute('disabled', 'true');
   },
   disabledFalse: () => {
-    $('#todo-add-btn').removeAttribute('disabled');
+    $<HTMLButtonElement>('#todo-add-btn').removeAttribute('disabled');
   },
 };
 
