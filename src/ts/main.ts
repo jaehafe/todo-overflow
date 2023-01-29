@@ -136,8 +136,9 @@ const updateTaskCount = async () => {
 const updateTask = async (e: any) => {
   const $taskId = e.target.closest('li').dataset.todoId;
   const taskObj = tasks.find((task) => task.id === $taskId);
+  if (!$taskId) return;
   if (!taskObj) return;
-  console.log(taskObj.title);
+  // console.log(taskObj.title);
   const $editBtn = e.target.closest('li').querySelector('.edit-btn');
   const $taskTitle = e.target.closest('li').querySelector('.todo-title');
 
@@ -157,8 +158,11 @@ const updateTask = async (e: any) => {
 };
 
 /** 할 일 이름 수정 이벤트 */
-$('.main__todo').addEventListener('click', (e: any) => {
-  if (e.target.classList.contains('edit-btn')) {
+$('.main__todo').addEventListener('click', (e: Event) => {
+  if (
+    e.target instanceof HTMLButtonElement &&
+    e.target.classList.contains('edit-btn')
+  ) {
     updateTask(e);
     return;
   }
@@ -203,9 +207,7 @@ $('.main__todo').addEventListener('click', (e: any) => {
 /** 할 일 삭제 함수 */
 const deleteTask = async (e: any) => {
   const $taskId = e.target.closest('li').dataset.todoId;
-  // const filtered = tasks.filter((task) => task.id !== $taskId);
   await TaskApi.deleteTask($taskId);
-  // await reorderTask();
   render(tasks);
 };
 
