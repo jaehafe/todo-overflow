@@ -190,16 +190,22 @@ const completeTask = async (e: any) => {
 };
 
 /** 할 일 완료 이벤트 */
-$('.main__todo').addEventListener('click', (e: any) => {
-  if (e.target.classList.contains('done-btn')) {
+$('.main__todo').addEventListener('click', (e: Event) => {
+  if (
+    e.target instanceof HTMLButtonElement &&
+    e.target.classList.contains('done-btn')
+  ) {
     completeTask(e);
     return;
   }
 });
 
 /** 할 일 삭제 이벤트 */
-$('.main__todo').addEventListener('click', (e: any) => {
-  if (e.target.classList.contains('delete-btn')) {
+$('.main__todo').addEventListener('click', (e: Event) => {
+  if (
+    e.target instanceof HTMLButtonElement &&
+    e.target.classList.contains('delete-btn')
+  ) {
     deleteTask(e);
   }
   return;
