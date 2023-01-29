@@ -5,57 +5,9 @@ import TaskApi from './api.js';
 import { ResponseValue, Todo } from './interface';
 
 let taskOrder: number = 0;
-
 let tasks: ResponseValue = [];
 
-const render = async (taskList: ResponseValue) => {
-  // taskList = tasks;
-  taskList = await TaskApi.getAllTask();
-  const template = taskList
-    .map((task: Todo) => {
-      return `
-    <li class="main__todo-list ${task.done ? 'complete' : ''}" data-todo-id="${
-        task.id
-      }" data-todo-order="${task.order}">
-      <div class="main__todo-list--title-container">
-        <div>
-          <span class="main__todo-list--date createdAt">생성: ${formattedDate(
-            task.createdAt
-          )}</span>
-          <span class="main__todo-list--date updatedAt">수정: ${formattedDate(
-            task.updatedAt
-          )}</span>
-        </div>
-        <span
-          contenteditable="false"
-          class="main__todo-list--title todo-title"
-          >${task.title}</span
-        >
-      </div>
-      <div class="main__todo-list--btn-container">
-        <button class="main__todo-list--done-btn btn done-btn">
-          ${task.done ? '완료' : '하는 중'}
-        </button>
-        <button class="main__todo-list--edit-btn btn edit-btn">
-          수정
-        </button>
-        <button class="main__todo-list--delete-btn btn delete-btn">
-          삭제
-        </button>
-      </div>
-    </li>
-    `;
-    })
-    .join('');
-
-  $('.main__todo').innerHTML = template;
-  $<HTMLInputElement>('.main__input-text').value = '';
-  updateTaskCount();
-};
-
-const renderByType = (taskList: ResponseValue) => {
-  // taskList = tasks;
-  // taskList = await TaskApi.getAllTask();
+const render = (taskList: ResponseValue) => {
   const template = taskList
     .map((task: Todo) => {
       return `
@@ -99,12 +51,8 @@ const renderByType = (taskList: ResponseValue) => {
 };
 
 const init = async () => {
-  // tasks = await TaskApi.getAllTask();
-
   $<HTMLInputElement>('.main__input-text').focus();
-  // if (task.done) {
-  //   $('.main__todo-list').classList.add('complete');
-  // }
+  tasks = await TaskApi.getAllTask();
   render(tasks);
 };
 
@@ -114,9 +62,13 @@ const updateTaskCount = async () => {
   const completedTaskArray = tasks.filter(
     (task: Todo): boolean => task.done === true
   );
-  $('.todo-total-count').textContent = `할 일 전체 ${tasks.length}개`;
-  $('.completed-task').textContent = `완료 ${completedTaskArray.length}개`;
-  $('.remaining-task').textContent = `하는 중 ${
+  $<HTMLButtonElement>(
+    '.todo-total-count'
+  ).textContent = `할 일 전체 ${tasks.length}개`;
+  $<HTMLButtonElement>(
+    '.completed-task'
+  ).textContent = `완료 ${completedTaskArray.length}개`;
+  $<HTMLButtonElement>('.remaining-task').textContent = `하는 중 ${
     tasks.length - completedTaskArray.length
   }개`;
 };
@@ -153,6 +105,7 @@ const updateTask = async (e: any) => {
 
     taskObj.title = editedTaskTitle;
     await TaskApi.updateTask($taskId, taskObj.title, taskObj.done);
+    tasks = await TaskApi.getAllTask();
     render(tasks);
   }
 };
@@ -186,6 +139,7 @@ const completeTask = async (e: any) => {
   }
   taskObj!.done = !taskObj!.done;
   tasks = await TaskApi.updateTask($taskId, taskObj!.title, taskObj!.done);
+  tasks = await TaskApi.getAllTask();
   render(tasks);
 };
 
@@ -214,6 +168,7 @@ $('.main__todo').addEventListener('click', (e: Event) => {
 const deleteTask = async (e: any) => {
   const $taskId = e.target.closest('li').dataset.todoId;
   await TaskApi.deleteTask($taskId);
+  tasks = await TaskApi.getAllTask();
   render(tasks);
 };
 
@@ -236,6 +191,7 @@ const deleteAllTask = async () => {
   for (let i = 0; i < tasks.length; i++) {
     await TaskApi.deleteTask(taskId[i]);
   }
+  tasks = await TaskApi.getAllTask();
   render(tasks);
 };
 
@@ -255,7 +211,7 @@ const deleteCompleted = async () => {
   for (let i = 0; i < taskIds.length; i++) {
     await TaskApi.deleteTask(taskIds[i]);
   }
-
+  tasks = await TaskApi.getAllTask();
   render(tasks);
 };
 
@@ -277,6 +233,8 @@ const createTask = async () => {
   }
 
   await TaskApi.createTask(inputValue, taskOrder);
+
+  tasks = await TaskApi.getAllTask();
   render(tasks);
 
   inputValue = '';
@@ -333,10 +291,10 @@ const renderTasksBySelect = async (done: string) => {
   } else if (done === 'completed') {
     const completedTask = tasks.filter((task) => task.done === true);
     console.log('completedTask', completedTask);
-    renderByType(completedTask);
+    render(completedTask);
   } else if (done === 'doing') {
     const doingTask = tasks.filter((task) => task.done === false);
-    renderByType(doingTask);
+    render(doingTask);
   }
   // 순서
   // if (order === 'recent') {
